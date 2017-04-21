@@ -6,11 +6,9 @@ set lazyredraw
 
 filetype off " required
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+"call vundle#begin('~/some/path')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
@@ -51,11 +49,6 @@ Plugin 'michaeljsmith/vim-indent-object'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
-
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 
 " -----------------------------------------------------
 
@@ -274,7 +267,6 @@ set undofile
 set visualbell 
 
 " Character for CLI expansion (TAB-completion).
-" set wildchar=<TAB> 
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
 set wildignore+=*/bower_components/*,*/node_modules/*
 set wildignore+=*/smarty/*,*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
@@ -358,10 +350,6 @@ endif
 
 " Find, edit, buffers
 noremap <Leader>e :edit 
-" noremap <Leader>B :buffers<CR>
-" noremap <Leader>b :buffer
-" noremap <Leader>D :bd
-" noremap <Leader>f :find
 
 map <Leader>d :BD<cr>
 
@@ -371,20 +359,8 @@ xmap <C-j> 5j
 nmap <C-k> 5k
 xmap <C-k> 5k
 
-" Better split switching (Ctrl-j, Ctrl-k, Ctrl-h, Ctrl-l)
-" map J <C-W><C-J>
-" map K <C-W><C-K>
-" map H <C-W><C-H>
-" map L <C-W><C-L>
-
 " Sudo write (,W)
 noremap <leader>W :w !sudo tee %<CR>
-
-" Remap keys for auto-completion, disable arrow keys
-" inoremap <expr>  <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-" inoremap <expr>  <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-" inoremap <expr>  <Down>     pumvisible() ? "\<C-n>" : "\<NOP>"
-" inoremap <expr>  <Up>       pumvisible() ? "\<C-p>" : "\<NOP>"
 
 " Disable arrow keys.
 inoremap <Up>    <NOP>
@@ -478,16 +454,6 @@ let g:jsx_ext_required = 0
 " emmet keybindings
 autocmd FileType html,css,js,jsx EmmetInstall
 let g:user_emmet_install_global = 0
-" let g:user_emmet_expandabbr_key='<Tab>'
-" imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-" imap <expr> hh emmet#expandAbbrIntelligent("hh")
-" let g:user_emmet_leader_key='hh'
-" imap hh <C-y>,
-
-" let g:user_emmet_mode='n'    "only enable normal mode functions.
-" let g:user_emmet_mode='inv'  "enable all functions, which is equal to
-" let g:user_emmet_mode='a'    "enable all function in all mode.
-
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
 
@@ -529,7 +495,6 @@ let g:syntastic_echo_current_error=1
 let g:syntastic_enable_balloons = 0
 let g:syntastic_auto_jump=0
 
-" let g:syntastic_enable_signs=0
 let g:syntastic_full_redraws=1
 
 let g:syntastic_error_symbol = '✖︎'
@@ -541,9 +506,6 @@ highlight link SyntasticErrorSign SignColumn
 highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
-
-" redraw screen on save
-" :au BufWritePost * redraw!
 
 " Fugitive
 nnoremap <leader>ga :Git add %:p<CR><CR>
@@ -561,7 +523,6 @@ call matchadd('MatchTodo', 'TODO', -1)
 
 "Hightligh columns that are over 80.
 highlight ColorColumn ctermbg=0 ctermfg=231
-" call matchadd('ColorColumn', '\%>81v', -1)
 
 " Insert newline
 map <leader><Enter> o<ESC>
@@ -604,9 +565,7 @@ command! -bang -nargs=? -complete=dir Files
 nnoremap <leader>* :%s/\<<C-r><C-w>\>//<Left>
 
 " Search for the word under cursor in current dir and sub dirs
-" :nnoremap <leader>F :silent execute "grep! -R " . shellescape(expand("<cWORD>")) . " ."<cr>:copen<cr>
 nnoremap <leader>q q:ivimgrep<Space>//<Space>**/*[ch]<Bar>copen<Esc>F/;innoremap <leader>g :lvimgrep /<C-r><C-w>/j **/* expand("%:e") \|lopen
-" nnoremap <leader>f :execute "vimgrep /" . input"Search: ") . "/j **" <Bar> cw<CR>
  nnoremap <leader>f :Rg<cr>
 
 " allows for running of script over multiple lines
@@ -628,34 +587,6 @@ xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 " Auto complete search.
 " set wildchar=<Tab> wildmenu wildmode=full
 
-" fzf with ctags
-" function! s:tags_sink(line)
-"   let parts = split(a:line, '\t\zs')
-"   let excmd = matchstr(parts[2:], '^.*\ze;"\t')
-"   execute 'silent e' parts[1][:-2]
-"   let [magic, &magic] = [&magic, 0]
-"   execute excmd
-"   let &magic = magic
-" endfunction
-
-" function! s:tags()
-"   if empty(tagfiles())
-"     echohl WarningMsg
-"     echom 'Preparing tags'
-"     echohl None
-"     call system('ctags -R')
-"   endif
-
-"   call fzf#run({
-"   \ 'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
-"   \            '| grep -v -a ^!',
-"   \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
-"   \ 'down':    '40%',
-"   \ 'sink':    function('s:tags_sink')})
-" endfunction
-
-" command! Tags call s:tags()
-
 noremap <Leader>t :Tags<cr>
 
 " Mapping selecting mappings
@@ -667,7 +598,6 @@ noremap <Leader>t :Tags<cr>
 imap <c-x><c-p> <plug>(fzf-complete-path)
 imap <c-x><c-f> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
-
 
 " imap <c-x><c-k> <plug>(fzf-complete-word)
 " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
@@ -702,11 +632,6 @@ function! ToggleVExplorer()
     endif
 endfunction
 map <silent> <C-E> :call ToggleVExplorer()<CR>
-
-" Hit enter in the file browser to open the selected
-" file with :vsplit to the right of browser
-"let g:netrw_brows_split = 4
-"let g:netrow_altv = 1
 
 " Default to tree mode
 let g:netrw_liststyle = 3
