@@ -438,11 +438,6 @@ imap <PageDown> <C-O><C-D>
 " Close Quickfix window
 map <leader>qq :cclose<CR>
 
-" fzf
-set rtp+=/usr/local/opt/fzf
-" map <leader><tab> :FZF -x<cr>
-map <leader><tab> :Files<cr>
-
 " youCompleteMe preview options
 let g:ycm_autoclose_preview_window_after_insertion = 1
 "" let g:ycm_autoclose_preview_window_after_completion = 1
@@ -457,12 +452,14 @@ let g:user_emmet_install_global = 0
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
 
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
+if exists(':EasyAlign')
+	" Start interactive EasyAlign in visual mode (e.g. vipga)
+	xmap ga <Plug>(EasyAlign)
+	" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+	nmap ga <Plug>(EasyAlign)
 
-nmap <Leader>= <Plug>(EasyAlign)ip
+	nmap <Leader>= <Plug>(EasyAlign)ip
+endif
 
 " Syntastic settings
 let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
@@ -508,12 +505,14 @@ highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
 
 " Fugitive
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -a<cr>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gl :silent! Glog<CR><bot></bot>copen<CR>
+if exists(':Gstatus')
+	nnoremap <leader>ga :Git add %:p<CR><CR>
+	nnoremap <leader>gs :Gstatus<CR>
+	nnoremap <leader>gc :Gcommit -a<cr>
+	nnoremap <Leader>gb :Gblame<CR>
+	nnoremap <leader>gd :Gdiff<CR>
+	nnoremap <leader>gl :silent! Glog<CR><bot></bot>copen<CR>
+endif
 
 highlight MatchTemp ctermbg=5 ctermfg=3
 call matchadd('MatchTemp', 'TEMP', -1)
@@ -527,9 +526,6 @@ highlight ColorColumn ctermbg=0 ctermfg=231
 " Insert newline
 map <leader><Enter> o<ESC>
 
-" FZF layout
-let g:fzf_layout = { 'up': '95%' }
-
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
@@ -540,12 +536,58 @@ if executable('rg')
   set grepprg=rg\ --color=never
 endif
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+" fzf
+if exists(':Fzf')
+	set rtp+=/usr/local/opt/fzf
+	" map <leader><tab> :FZF -x<cr>
+	map <leader><tab> :Files<cr>
+
+	" FZF layout
+	let g:fzf_layout = { 'up': '95%' }
+
+	command! -bang -nargs=* Rg
+	  \ call fzf#vim#grep(
+	  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+	  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+	  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+	  \   <bang>0)
+
+	command! -bang -nargs=? -complete=dir Files
+				\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+	" Mapping selecting mappings
+	" nmap <leader><tab> <plug>(fzf-maps-n)
+	" xmap <leader><tab> <plug>(fzf-maps-x)
+	" omap <leader><tab> <plug>(fzf-maps-o)
+
+	" Insert mode completion
+	imap <c-x><c-p> <plug>(fzf-complete-path)
+	imap <c-x><c-f> <plug>(fzf-complete-file-ag)
+	imap <c-x><c-l> <plug>(fzf-complete-line)
+
+	" imap <c-x><c-k> <plug>(fzf-complete-word)
+	" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+
+	" Replace the default dictionary completion with fzf-based fuzzy completion
+	" inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+
+	" noremap <Leader>c :Commits<cr>
+
+	" Fuzzy search changed files (git ls-files)
+	command! Fzfc call fzf#run(fzf#wrap(
+				\ {'source': 'git ls-files --exclude-standard --others --modified'}))
+	noremap <Leader>l :Fzfc<cr>
+
+	noremap <Leader>m :Marks<cr>
+
+	" Fuzzy search buffers
+	noremap <Leader>b :Buffers<cr>
+	" map <silent> <Leader>b :call fzf#run(fzf#wrap(
+	"     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}))<CR>
+
+	noremap <Leader>t :Tags<cr>
+
+endif
 
 " quicklook
 map <Leader>v :write<cr>:sil !/usr/bin/qlmanage -p % > /dev/null &<cr>:redraw!<cr>
@@ -558,15 +600,13 @@ vnoremap <silent> <Leader>* :<C-U>
   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>:set hls<CR>
 
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Search and replace word under cursor (,*)
 nnoremap <leader>* :%s/\<<C-r><C-w>\>//<Left>
 
 " Search for the word under cursor in current dir and sub dirs
 nnoremap <leader>q q:ivimgrep<Space>//<Space>**/*[ch]<Bar>copen<Esc>F/;innoremap <leader>g :lvimgrep /<C-r><C-w>/j **/* expand("%:e") \|lopen
- nnoremap <leader>f :Rg<cr>
+nnoremap <leader>f :Rg<cr>
 
 " allows for running of script over multiple lines
 function! <SID>StripWhitespace ()
@@ -581,36 +621,8 @@ noremap <leader>ss :call <SID>StripWhitespace ()<CR>
 " auto call function above on save
 autocmd BufWritePre * if &ft =~ 'sh\|perl\|python\|php\|javascript\|less\|css' | :call <SID>StripWhitespace() | endif
 
-" macro over multiple lines
-xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
 " Auto complete search.
 " set wildchar=<Tab> wildmenu wildmode=full
-
-noremap <Leader>t :Tags<cr>
-
-" Mapping selecting mappings
-" nmap <leader><tab> <plug>(fzf-maps-n)
-" xmap <leader><tab> <plug>(fzf-maps-x)
-" omap <leader><tab> <plug>(fzf-maps-o)
-
-" Insert mode completion
-imap <c-x><c-p> <plug>(fzf-complete-path)
-imap <c-x><c-f> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" imap <c-x><c-k> <plug>(fzf-complete-word)
-" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
-
-" Replace the default dictionary completion with fzf-based fuzzy completion
-" inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
-
-" noremap <Leader>c :Commits<cr>
-
-" Fuzzy search changed files (git ls-files)
-command! Fzfc call fzf#run(fzf#wrap(
-  \ {'source': 'git ls-files --exclude-standard --others --modified'}))
-noremap <Leader>l :Fzfc<cr>
 
 " Toggle Vexplore with Ctrl-E
 function! ToggleVExplorer()
@@ -641,16 +653,12 @@ function! ExecuteMacroOverVisualRange()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 
+" macro over multiple lines
+xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+
 " Add vim-repeat support to non nativly supported plugins:
 " https://github.com/tpope/vim-repeat
 " silent! call repeat#set("\<Plug>MyWonderfulPlugin", v:count)
-
-noremap <Leader>m :Marks<cr>
-
-" Fuzzy search buffers
-noremap <Leader>b :Buffers<cr>
-" map <silent> <Leader>b :call fzf#run(fzf#wrap(
-"     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}))<CR>
 
 " Restore cursor position
 autocmd BufReadPost *
