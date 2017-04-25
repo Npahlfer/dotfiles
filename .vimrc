@@ -6,35 +6,36 @@ set lazyredraw
 
 filetype off " required
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
 "call vundle#begin('~/some/path')
+call plug#begin('~/.vim/bundle')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Plugin 'VundleVim/Vundle.vim'
 
 " -----------------------------------------------------
 
-Plugin 'mattn/emmet-vim'
-Plugin 'delimitMate.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-repeat'
-Plugin 'scrooloose/syntastic'
-Plugin 'hail2u/vim-css3-syntax'
-Plugin 'othree/html5.vim'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'captbaritone/better-indent-support-for-php-with-html'
-Plugin 'junegunn/fzf.vim'
-Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'nrocco/vim-phplint'
-Plugin 'kshenoy/vim-signature' 
-Plugin 'qpkorr/vim-bufkill'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-Plugin 'michaeljsmith/vim-indent-object'
+Plug 'mattn/emmet-vim'
+Plug 'delimitMate.vim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'scrooloose/syntastic'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'othree/html5.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'captbaritone/better-indent-support-for-php-with-html'
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+Plug 'shawncplus/phpcomplete.vim'
+Plug 'nrocco/vim-phplint'
+Plug 'kshenoy/vim-signature' 
+Plug 'qpkorr/vim-bufkill'
+Plug 'Valloric/YouCompleteMe'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'michaeljsmith/vim-indent-object'
 
 " Plugin 'valloric/MatchTagAlways'
 " Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -47,7 +48,8 @@ Plugin 'michaeljsmith/vim-indent-object'
 
 " -----------------------------------------------------
 
-call vundle#end()            " required
+" call vundle#end()            " required
+call plug#end()
 filetype plugin indent on    " required
 
 " -----------------------------------------------------
@@ -129,6 +131,12 @@ set encoding=utf-8 nobomb
 
 " Column to show folds
 " set foldcolumn=4 
+
+" border char
+set fillchars+=vert:\ 
+
+" border colour
+hi! VertSplit ctermfg=2 ctermbg=NONE term=NONE
 
 set foldenable
 set foldlevel=10
@@ -311,24 +319,14 @@ command! MakeTags !ctags -R .
 "clearing highlighted search
 nmap <silent> <leader>/ :nohlsearch<CR>
 
-nnoremap <silent> n n:call HLNext(0.4)<cr>
-nnoremap <silent> N N:call HLNext(0.4)<cr>
-
-function! HLNext (blinktime)
-	set invcursorline
-	redraw
-	exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-	set invcursorline
-	redraw
-endfunction
-
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 
 " Status Line
-hi User1 guibg=#455354 guifg=fg      ctermbg=238 ctermfg=fg  gui=bold,underline cterm=bold,underline term=bold,underline
-hi User2 guibg=#455354 guifg=#CC4329 ctermbg=238 ctermfg=196 gui=bold           cterm=bold           term=bold
+" hi User1 guibg=#000000 guifg=fg ctermbg=238 ctermfg=fg gui=bold,underline cterm=bold,underline term=bold,underline
+
+" hi User2 guibg=#2c343b guifg=#CC4329 ctermbg=0 ctermfg=196 gui=bold cterm=bold term=bold
 set statusline=[%n]\ %F\ %2*%h%w%m%r%*%y[%{&ff}→%{strlen(&fenc)?&fenc:'No\ Encoding'}]%=%-16(\ L%l,C%c\ %)%P
 let g:Powerline_symbols = 'fancy'
 
@@ -438,6 +436,9 @@ imap <PageDown> <C-O><C-D>
 " Close Quickfix window
 map <leader>qq :cclose<CR>
 
+" vim-javascript
+let g:javascript_plugin_flow = 1
+
 " youCompleteMe preview options
 let g:ycm_autoclose_preview_window_after_insertion = 1
 "" let g:ycm_autoclose_preview_window_after_completion = 1
@@ -452,14 +453,12 @@ let g:user_emmet_install_global = 0
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
 
-if exists(':EasyAlign')
-	" Start interactive EasyAlign in visual mode (e.g. vipga)
-	xmap ga <Plug>(EasyAlign)
-	" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-	nmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
-	nmap <Leader>= <Plug>(EasyAlign)ip
-endif
+nmap <Leader>= <Plug>(EasyAlign)ip
 
 " Syntastic settings
 let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
@@ -471,7 +470,7 @@ if executable(local_eslint)
 endif
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 0
@@ -505,14 +504,12 @@ highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
 
 " Fugitive
-if exists(':Gstatus')
-	nnoremap <leader>ga :Git add %:p<CR><CR>
-	nnoremap <leader>gs :Gstatus<CR>
-	nnoremap <leader>gc :Gcommit -a<cr>
-	nnoremap <Leader>gb :Gblame<CR>
-	nnoremap <leader>gd :Gdiff<CR>
-	nnoremap <leader>gl :silent! Glog<CR><bot></bot>copen<CR>
-endif
+nnoremap <leader>ga :Git add %:p<CR><CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gc :Gcommit -a<cr>
+nnoremap <Leader>gb :Gblame<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gl :silent! Glog<CR><bot></bot>copen<CR>
 
 highlight MatchTemp ctermbg=5 ctermfg=3
 call matchadd('MatchTemp', 'TEMP', -1)
@@ -536,58 +533,57 @@ if executable('rg')
   set grepprg=rg\ --color=never
 endif
 
+" set rtp+=/usr/local/opt/fzf
+
 " fzf
-if exists(':Fzf')
-	set rtp+=/usr/local/opt/fzf
-	" map <leader><tab> :FZF -x<cr>
-	map <leader><tab> :Files<cr>
+" map <leader><tab> :FZF -x<cr>
+map <leader><tab> :Files<cr>
 
-	" FZF layout
-	let g:fzf_layout = { 'up': '95%' }
+" FZF layout
+let g:fzf_layout = { 'down': '60%' }
 
-	command! -bang -nargs=* Rg
-	  \ call fzf#vim#grep(
-	  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-	  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-	  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-	  \   <bang>0)
+command! -bang -nargs=* Rg
+			\ call fzf#vim#grep(
+			\   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+			\   <bang>0 ? fzf#vim#with_preview('up:60%')
+			\           : fzf#vim#with_preview('right:50%:hidden', '?'),
+			\   <bang>0)
 
-	command! -bang -nargs=? -complete=dir Files
-				\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? -complete=dir Files
+			\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-	" Mapping selecting mappings
-	" nmap <leader><tab> <plug>(fzf-maps-n)
-	" xmap <leader><tab> <plug>(fzf-maps-x)
-	" omap <leader><tab> <plug>(fzf-maps-o)
+" Mapping selecting mappings
+" nmap <leader><tab> <plug>(fzf-maps-n)
+" xmap <leader><tab> <plug>(fzf-maps-x)
+" omap <leader><tab> <plug>(fzf-maps-o)
 
-	" Insert mode completion
-	imap <c-x><c-p> <plug>(fzf-complete-path)
-	imap <c-x><c-f> <plug>(fzf-complete-file-ag)
-	imap <c-x><c-l> <plug>(fzf-complete-line)
+" Insert mode completion
+imap <c-x><c-p> <plug>(fzf-complete-path)
+imap <c-x><c-f> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 
-	" imap <c-x><c-k> <plug>(fzf-complete-word)
-	" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+" imap <c-x><c-k> <plug>(fzf-complete-word)
+" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
-	" Replace the default dictionary completion with fzf-based fuzzy completion
-	" inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
+" Replace the default dictionary completion with fzf-based fuzzy completion
+" inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
 
-	" noremap <Leader>c :Commits<cr>
+" noremap <Leader>c :Commits<cr>
 
-	" Fuzzy search changed files (git ls-files)
-	command! Fzfc call fzf#run(fzf#wrap(
-				\ {'source': 'git ls-files --exclude-standard --others --modified'}))
-	noremap <Leader>l :Fzfc<cr>
+" Fuzzy search changed files (git ls-files)
+command! Fzfc call fzf#run(fzf#wrap(
+			\ {'source': 'git ls-files --exclude-standard --others --modified'}))
+noremap <Leader>l :Fzfc<cr>
 
-	noremap <Leader>m :Marks<cr>
+noremap <Leader>m :Marks<cr>
 
-	" Fuzzy search buffers
-	noremap <Leader>b :Buffers<cr>
-	" map <silent> <Leader>b :call fzf#run(fzf#wrap(
-	"     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}))<CR>
+" Fuzzy search buffers
+noremap <Leader>b :Buffers<cr>
+" map <silent> <Leader>b :call fzf#run(fzf#wrap(
+"     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}))<CR>
 
-	noremap <Leader>t :Tags<cr>
+noremap <Leader>t :Tags<cr>
 
-endif
 
 " quicklook
 map <Leader>v :write<cr>:sil !/usr/bin/qlmanage -p % > /dev/null &<cr>:redraw!<cr>
@@ -674,6 +670,10 @@ command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
 
 " JSON
 au BufRead,BufNewFile *.json set ft=json syntax=javascript
+
+if executable('jq')
+	autocmd BufRead *.json :%!jq .
+endif
 
 " Common Ruby files
 au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
