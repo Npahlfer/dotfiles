@@ -324,11 +324,14 @@ cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 
 " Status Line
-" hi User1 guibg=#000000 guifg=fg ctermbg=238 ctermfg=fg gui=bold,underline cterm=bold,underline term=bold,underline
-
-" hi User2 guibg=#2c343b guifg=#CC4329 ctermbg=0 ctermfg=196 gui=bold cterm=bold term=bold
-set statusline=[%n]\ %F\ %2*%h%w%m%r%*%y[%{&ff}→%{strlen(&fenc)?&fenc:'No\ Encoding'}]%=%-16(\ L%l,C%c\ %)%P
+set statusline=%<%f\ %{fugitive#statusline()}\ %h%m%r%=%-14.(%l,%c%V%)\ %{strlen(&fenc)?&fenc:'none'}\ %P
+hi StatusLine ctermbg=0 ctermfg=7
+hi StatusLineNC ctermbg=0 ctermfg=233
 let g:Powerline_symbols = 'fancy'
+
+" autocomplete window colours.
+highlight Pmenu ctermfg=7 ctermbg=239
+highlight PmenuSel ctermfg=250 ctermbg=236
 
 " Speed up viewport scrolling
 nnoremap <C-e> 3<C-e>
@@ -339,12 +342,6 @@ nnoremap <C-y> 3<C-y>
 
 " Set update delay to 250ms
 set updatetime=150
-
-" Faster split resizing (+,-)
-if bufwinnr(1)
-  map + <C-W>+
-  map - <C-W>-
-endif
 
 " Find, edit, buffers
 noremap <Leader>e :edit 
@@ -372,7 +369,7 @@ nnoremap <Right> <NOP>
 
 " split current window
 nnoremap <leader>- :split file<CR>
-nnoremap <leader>/ :vsplit file<CR>
+nnoremap <leader>\ :vsplit file<CR>
 
 noremap <Leader>a =ip
 
@@ -426,6 +423,9 @@ nnoremap <Leader><left> :vertical resize -4<cr>
 nnoremap <Leader><down> :resize +5<cr>
 nnoremap <Leader><up> :resize -5<cr>
 nnoremap <Leader><right> :vertical resize +5<cr>
+
+" Center and maximize current buffer
+" nnoremap <Leader>c <C-w>_<C-w>|
 
 " Fix page up and down
 map <PageUp> <C-U>
@@ -540,7 +540,7 @@ endif
 map <leader><tab> :Files<cr>
 
 " FZF layout
-let g:fzf_layout = { 'down': '60%' }
+let g:fzf_layout = { 'down': '45%' }
 
 command! -bang -nargs=* Rg
 			\ call fzf#vim#grep(
