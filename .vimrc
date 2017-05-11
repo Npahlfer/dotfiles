@@ -20,6 +20,7 @@ Plug 'mattn/emmet-vim'
 Plug 'delimitMate.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/syntastic'
@@ -91,23 +92,6 @@ set showcmd
 
 " Reload files that have been changed outside vim
 set autoread 
-
-" Copy indent from last line when starting new line.
-set autoindent 
-
-" :let g:html_indent_inctags = "html,body,head,tbody,div,p,span"
-
-" Indents mostly right
-:set smartindent   
-
-" Tabs are at proper location
-:set tabstop=4     
-
-" Don't use actual tab character (ctrl-v)
-:set noexpandtab     
-
-" Indenting is 4 spaces
-:set shiftwidth=4  
 
 " Stricter rules for C programs
 :set cindent       
@@ -304,6 +288,26 @@ set scrolloff=3
 set relativenumber " Use relative line numbers. Current line is still in status bar.
 au BufReadPost,BufNewFile * set relativenumber
 
+" Copy indent from last line when starting new line.
+set autoindent 
+
+" :let g:html_indent_inctags = "html,body,head,tbody,div,p,span"
+
+" Indents mostly right
+:set smartindent   
+
+" Tabs are at proper location
+:set tabstop=4     
+
+" Don't use actual tab character (ctrl-v)
+:set noexpandtab     
+
+" Indenting is 4 spaces
+:set shiftwidth=4  
+
+au FileType python setl sw=2 sts=2 et
+au FileType haskell setl sw=4 sts=4 et tabstop=8 shiftround
+
 " Speed up transition from modes
 if ! has('gui_running')
   set ttimeoutlen=10
@@ -400,9 +404,9 @@ command! Wa wa
 nnoremap Y y$
 
 " Toggle show tabs and trailing spaces (,t)
-" set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_
-" set fcs=fold:-
-" nnoremap <silent> <leader>t :set nolist!<CR>
+set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_,space:-
+set fcs=fold:-
+nnoremap <silent> <leader>T :set nolist!<CR>
 
 " Clear last search (,qs)
 map <silent> <leader>qs <Esc>:noh<CR>
@@ -509,7 +513,7 @@ nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gc :Gcommit -a<cr>
 nnoremap <Leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gl :silent! Glog<CR><bot></bot>copen<CR>
+nnoremap <leader>gl :GV<CR>
 
 highlight MatchTemp ctermbg=5 ctermfg=3
 call matchadd('MatchTemp', 'TEMP', -1)
