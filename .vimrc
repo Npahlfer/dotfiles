@@ -17,7 +17,7 @@ call plug#begin('~/.vim/bundle')
 " -----------------------------------------------------
 
 Plug 'mattn/emmet-vim'
-Plug 'delimitMate.vim'
+Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
@@ -28,7 +28,9 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'othree/html5.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+" Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'nrocco/vim-phplint'
 Plug 'kshenoy/vim-signature' 
@@ -37,6 +39,10 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'elmcast/elm-vim'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'osyo-manga/vim-over'
+" Plug 'kien/rainbow_parentheses.vim'
 
 " Plugin 'valloric/MatchTagAlways'
 " Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -160,7 +166,7 @@ set formatoptions+=1
 :set colorcolumn=+1
 
 " By default add g flag to search/replace. Add g to toggle.
-set gdefault 
+" set gdefault 
 
 " When a buffer is brought to foreground, remember undo history and marks.
 set hidden 
@@ -259,8 +265,9 @@ set undofile
 set visualbell 
 
 " Character for CLI expansion (TAB-completion).
-set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
+set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js,*.sql
 set wildignore+=*/bower_components/*,*/node_modules/*
+set wildignore+=*/wp-/plugins/*,*/w3tc-config/*,*/cache/*
 set wildignore+=*/smarty/*,*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 
 " Hitting TAB in command mode will show possible completions above command line.
@@ -305,9 +312,6 @@ set autoindent
 " Indenting is 4 spaces
 :set shiftwidth=4  
 
-au FileType python setl sw=2 sts=2 et
-au FileType haskell setl sw=4 sts=4 et tabstop=8 shiftround
-
 " Speed up transition from modes
 if ! has('gui_running')
   set ttimeoutlen=10
@@ -334,7 +338,7 @@ hi StatusLineNC ctermbg=0 ctermfg=233
 let g:Powerline_symbols = 'fancy'
 
 " autocomplete window colours.
-highlight Pmenu ctermfg=7 ctermbg=239
+highlight Pmenu ctermfg=15 ctermbg=239
 highlight PmenuSel ctermfg=250 ctermbg=236
 
 " Speed up viewport scrolling
@@ -378,7 +382,8 @@ nnoremap <leader>\ :vsplit file<CR>
 noremap <Leader>a =ip
 
 " easy regex replace
-:nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+:nnoremap <Leader>s :s/\<<C-r><C-w>\>/
+:nnoremap <Leader>S :%s/\<<C-r><C-w>\>/
 
 " select but dont jump 
 nnoremap <Leader>8 *#
@@ -507,13 +512,38 @@ highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
 
-" Fugitive
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -a<cr>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gl :GV<CR>
+" Rainbow parentheses
+" let g:rbpt_colorpairs = [
+"     \ ['brown',       'RoyalBlue3'],
+"     \ ['Darkblue',    'SeaGreen3'],
+"     \ ['darkgray',    'DarkOrchid3'],
+"     \ ['darkgreen',   'firebrick3'],
+"     \ ['darkcyan',    'RoyalBlue3'],
+"     \ ['darkred',     'SeaGreen3'],
+"     \ ['darkmagenta', 'DarkOrchid3'],
+"     \ ['brown',       'firebrick3'],
+"     \ ['gray',        'RoyalBlue3'],
+"     \ ['black',       'SeaGreen3'],
+"     \ ['darkmagenta', 'DarkOrchid3'],
+"     \ ['Darkblue',    'firebrick3'],
+"     \ ['darkgreen',   'RoyalBlue3'],
+"     \ ['darkcyan',    'SeaGreen3'],
+"     \ ['darkred',     'DarkOrchid3'],
+"     \ ['red',         'firebrick3'],
+"     \ ]
+
+" let g:rbpt_max = 16
+" let g:rbpt_loadcmd_toggle = 0
+" au VimEnter * RainbowParenthesesToggle
+" au Syntax * RainbowParenthesesLoadRound
+" au Syntax * RainbowParenthesesLoadSquare
+" au Syntax * RainbowParenthesesLoadBraces
+
+au VimEnter * RainbowParentheses
+
+let g:rainbow#max_level = 16
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+
 
 highlight MatchTemp ctermbg=5 ctermfg=3
 call matchadd('MatchTemp', 'TEMP', -1)
@@ -527,6 +557,15 @@ highlight ColorColumn ctermbg=0 ctermfg=231
 " Insert newline
 map <leader><Enter> o<ESC>
 
+" Elm keybindings
+let g:elm_setup_keybindings = 0
+
+let g:ycm_semantic_triggers = {
+     \ 'elm' : ['.'],
+     \}
+
+let g:elm_format_autosave = 1
+
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
@@ -534,17 +573,60 @@ if executable('ag')
 endif
 
 if executable('rg')
-  set grepprg=rg\ --color=never
+  set grepprg=rg\ --vimgrep\ --color=never 
 endif
 
-" set rtp+=/usr/local/opt/fzf
-
 " fzf
+  let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+
+  nnoremap <silent> <leader><tab> :Files<CR>
+  nnoremap <silent> <leader>b :Buffers<CR>
+  " nnoremap <silent> <leader>A :Windows<CR>
+  nnoremap <silent> <leader>; :BLines<CR>
+  nnoremap <silent> <leader>o :BTags<CR>
+  nnoremap <silent> <leader>O :Tags<CR>
+  nnoremap <silent> <leader>? :History<CR>
+  nnoremap <silent> <leader>/ :execute 'rg ' . input('rg/')<CR>
+  nnoremap <silent> <leader>. :AgIn 
+
+  nnoremap <silent> K :call SearchWordWithAg()<CR>
+  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+  nnoremap <silent> <leader>ft :Filetypes<CR>
+
+  imap <c-x><c-p> <plug>(fzf-complete-path)
+  imap <C-x><C-f> <plug>(fzf-complete-file-rg)
+  imap <C-x><C-l> <plug>(fzf-complete-line)
+
+  function! SearchWordWithAg()
+    execute 'ag' expand('<cword>')
+  endfunction
+
+  function! SearchVisualSelectionWithAg() range
+    let old_reg = getreg('"')
+    let old_regtype = getregtype('"')
+    let old_clipboard = &clipboard
+    set clipboard&
+    normal! ""gvy
+    let selection = getreg('"')
+    call setreg('"', old_reg, old_regtype)
+    let &clipboard = old_clipboard
+    execute 'ag' selection
+  endfunction
+
+  function! SearchWithAgInDirectory(...)
+    call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
+  endfunction
+  command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
+"
+"
+"
 " map <leader><tab> :FZF -x<cr>
-map <leader><tab> :Files<cr>
+" map <leader><tab> :Files<cr>
+
+
 
 " FZF layout
-let g:fzf_layout = { 'down': '45%' }
+" let g:fzf_layout = { 'down': '45%' }
 
 command! -bang -nargs=* Rg
 			\ call fzf#vim#grep(
@@ -553,59 +635,25 @@ command! -bang -nargs=* Rg
 			\           : fzf#vim#with_preview('right:50%:hidden', '?'),
 			\   <bang>0)
 
-command! -bang -nargs=? -complete=dir Files
-			\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+" command! -bang -nargs=? -complete=dir Files
+" 			\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Mapping selecting mappings
-" nmap <leader><tab> <plug>(fzf-maps-n)
-" xmap <leader><tab> <plug>(fzf-maps-x)
-" omap <leader><tab> <plug>(fzf-maps-o)
+" Fugitive
+nnoremap <silent> <leader>ga :Git add %:p<CR><CR>
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gc :Gcommit -a<cr>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
+nnoremap <silent> <leader>gl :GV<CR>
 
-" Insert mode completion
-imap <c-x><c-p> <plug>(fzf-complete-path)
-imap <c-x><c-f> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
+" vim over keybindings
+nnoremap g? :<c-u>OverCommandLine<cr>?
+nnoremap g/ :<c-u>OverCommandLine<cr>/
+nnoremap g/r :<c-u>OverCommandLine<cr>%s/
+xnoremap g/r :<c-u>OverCommandLine<cr>%s/\%V
+let g:over_command_line_prompt = ": "
 
-" imap <c-x><c-k> <plug>(fzf-complete-word)
-" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
-
-" Replace the default dictionary completion with fzf-based fuzzy completion
-" inoremap <expr> <c-x><c-k> fzf#complete('cat /usr/share/dict/words')
-
-" noremap <Leader>c :Commits<cr>
-
-" Fuzzy search changed files (git ls-files)
-command! Fzfc call fzf#run(fzf#wrap(
-			\ {'source': 'git ls-files --exclude-standard --others --modified'}))
-noremap <Leader>l :Fzfc<cr>
-
-noremap <Leader>m :Marks<cr>
-
-" Fuzzy search buffers
-noremap <Leader>b :Buffers<cr>
-" map <silent> <Leader>b :call fzf#run(fzf#wrap(
-"     \ {'source': map(range(1, bufnr('$')), 'bufname(v:val)')}))<CR>
-
-noremap <Leader>t :Tags<cr>
-
-
-" quicklook
-map <Leader>v :write<cr>:sil !/usr/bin/qlmanage -p % > /dev/null &<cr>:redraw!<cr>
-
-" Quick search n replace
-nnoremap <silent> <Leader>* :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-vnoremap <silent> <Leader>* :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy:let @/=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>:set hls<CR>
-
-
-" Search and replace word under cursor (,*)
-nnoremap <leader>* :%s/\<<C-r><C-w>\>//<Left>
-
-" Search for the word under cursor in current dir and sub dirs
-nnoremap <leader>q q:ivimgrep<Space>//<Space>**/*[ch]<Bar>copen<Esc>F/;innoremap <leader>g :lvimgrep /<C-r><C-w>/j **/* expand("%:e") \|lopen
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 nnoremap <leader>f :Rg<cr>
 
 " allows for running of script over multiple lines
@@ -619,7 +667,7 @@ endfunction
 noremap <leader>ss :call <SID>StripWhitespace ()<CR>
 
 " auto call function above on save
-autocmd BufWritePre * if &ft =~ 'sh\|perl\|python\|php\|javascript\|less\|css' | :call <SID>StripWhitespace() | endif
+autocmd BufWritePre * silent if &ft =~ 'sh\|perl\|python\|php\|javascript\|less\|css' | :call <SID>StripWhitespace() | endif
 
 " Auto complete search.
 " set wildchar=<Tab> wildmenu wildmode=full
@@ -656,6 +704,9 @@ endfunction
 " macro over multiple lines
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
+" Regex to remove HTML tags.
+command! RmHTML :%s/<[^>]*>/
+
 " Add vim-repeat support to non nativly supported plugins:
 " https://github.com/tpope/vim-repeat
 " silent! call repeat#set("\<Plug>MyWonderfulPlugin", v:count)
@@ -690,4 +741,14 @@ au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
 " ZSH
 au BufRead,BufNewFile .zsh_rc,.functions,.commonrc set ft=zsh
+
+" Python
+au FileType python setl sw=2 sts=2 et
+
+" Haskell
+au FileType haskell setl sw=4 sts=4 et tabstop=8 shiftround
+
+" Cabal
+au FileType cabal setl sw=4 sts=4 et tabstop=8 shiftround
+
 

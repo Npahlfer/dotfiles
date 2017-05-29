@@ -142,16 +142,15 @@ zlist() {
 	awk '/-----/ {p = ++p % 2; next} p {print $NF}'
 }
 
-# Apple keyboard check - Linux specific
-appleKeyboard() {
-	if  xinput -list | grep -q "Apple Keyboard"
-	then
-		echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
-		echo 0 | sudo tee /sys/module/hid_apple/parameters/iso_layout
-		echo 1 | sudo tee /sys/module/hid_apple/parameters/swap_opt_cmd
-	else
-		echo "No Apple keyboard found"
-	fi
+# panic command.
+minimizeAllWindows() {
+osascript <<'END'
+tell application "System Events"
+	repeat with p in every application process whose visible is true
+		click (first button of every window of p whose role description is "minimize button")
+	end repeat
+end tell
+END
 }
 
 # mkdir and cd to that directory
@@ -270,6 +269,11 @@ getValue() {
 
 tellWhenFinished() {
 	terminal-notifier -message "Job finished" -title "Terminal job"
+}
+
+# Download all images from website to current dir.
+getAllImagesFromWebsite() {
+	wget -r -l 1 -A jpeg,jpg,bmp,gif,png "$@"
 }
 
 dirSize() {

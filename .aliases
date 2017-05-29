@@ -119,8 +119,8 @@ alias g="git"
 # alias vimr="/Applications/MacVim.app/Contents/MacOS/Vim --servername VIM"
 # alias vimt="/Applications/MacVim.app/Contents/MacOS/Vim --remote-tab"
 
-# alias vim="nvim"
-# alias v="nvim"
+alias vim="nvim"
+alias v="nvim"
 alias emacs="/usr/local/Cellar/emacs-plus/24.5/Emacs.app/Contents/MacOS/Emacs"
 
 # File size
