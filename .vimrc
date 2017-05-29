@@ -161,7 +161,7 @@ set formatoptions+=l
 set formatoptions+=1 
 
 " Text 
-:set textwidth=80
+" :set textwidth=80
 
 :set colorcolumn=+1
 
@@ -623,8 +623,6 @@ endif
 " map <leader><tab> :FZF -x<cr>
 " map <leader><tab> :Files<cr>
 
-
-
 " FZF layout
 " let g:fzf_layout = { 'down': '45%' }
 
@@ -647,6 +645,9 @@ nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>gl :GV<CR>
 
 " vim over keybindings
+nnoremap <leader>G :<c-u>OverCommandLine<cr>%s/\<<C-r><C-w>\>/<C-r><C-w>
+nnoremap <leader>g :<c-u>OverCommandLine<cr>%s/
+xnoremap <leader>g :<c-u>OverCommandLine<cr>%s/\%V
 nnoremap g? :<c-u>OverCommandLine<cr>?
 nnoremap g/ :<c-u>OverCommandLine<cr>/
 nnoremap g/r :<c-u>OverCommandLine<cr>%s/
