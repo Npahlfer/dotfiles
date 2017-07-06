@@ -39,10 +39,7 @@ alias apui='sudo softwareupdate -v -i -a'
 
 # Application shortcuts
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
-alias artisan='php artisan'
-alias simulator='open "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"'
 alias photoshop='open -a Adobe\ Photoshop\ CC\ 2015.app'
-alias frodo='/usr/local/bin/frodo'
 alias imgcat='~/Dropbox/code/scripts/imgcat.sh'
 alias class-dump='~/Dropbox/code/classDump/class-dump'
 alias ql='qlmanage -p "$@" >& /dev/null'
@@ -50,6 +47,8 @@ alias terminal_velocity='terminal_velocity ~/Dropbox/Documents/notes'
 alias tv=terminal_velocity
 
 alias cask='brew cask'
+
+alias python='python3'
 
 # typos
 alias cd..='cd ..'

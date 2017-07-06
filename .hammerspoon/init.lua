@@ -14,6 +14,7 @@ k:bind('', 'f', function() hs.application.launchOrFocus("Finder") end)
 k:bind('', 's', function() hs.application.launchOrFocus("Franz") end)
 k:bind('', 'space', function() hs.application.launchOrFocus("iTerm") end)
 k:bind('', 'w', function() hs.application.launchOrFocus("Google Chrome") end)
+k:bind('shift', 'w', function() hs.application.launchOrFocus("FirefoxDeveloperEdition") end)
 k:bind('', 'p', function() hs.application.launchOrFocus("Spotify") end)
 k:bind('', '1', function() hs.application.launchOrFocus("Sketch") end)
 k:bind('', '2', function() hs.application.launchOrFocus("Preview") end)
@@ -27,6 +28,9 @@ require('keyboard')
 require('watcher')
 require('position')
 
+-- function setIterm2Profile(profile)
+--    hs.execute("echo -e '\033]50;SetProfile=" .. profile .. "\x7'")
+-- end
 
 -- Enter Hyper Mode when F18 (Hyper/Capslock) is pressed
 pressedF18 = function()

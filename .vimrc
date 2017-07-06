@@ -2,7 +2,7 @@ set nocompatible " be iMproved, required
 
 " speed up vim
 set ttyfast
-set lazyredraw
+" set lazyredraw
 
 filetype off " required
 
@@ -16,7 +16,7 @@ call plug#begin('~/.vim/bundle')
 
 " -----------------------------------------------------
 
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
@@ -42,8 +42,13 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'elmcast/elm-vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'osyo-manga/vim-over'
-" Plug 'kien/rainbow_parentheses.vim'
+Plug 'ternjs/tern_for_vim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+Plug 'sbdchd/neoformat'
+Plug 'vim-scripts/YankRing.vim'
 
+Plug 'johngrib/vim-game-code-break'
 " Plugin 'valloric/MatchTagAlways'
 " Plugin 'MarcWeber/vim-addon-mw-utils'
 " Plugin 'tomtom/tlib_vim'
@@ -334,7 +339,7 @@ cmap cd. lcd %:p:h
 " Status Line
 set statusline=%<%f\ %{fugitive#statusline()}\ %h%m%r%=%-14.(%l,%c%V%)\ %{strlen(&fenc)?&fenc:'none'}\ %P
 hi StatusLine ctermbg=0 ctermfg=7
-hi StatusLineNC ctermbg=0 ctermfg=233
+hi StatusLineNC ctermbg=0 ctermfg=2
 let g:Powerline_symbols = 'fancy'
 
 " autocomplete window colours.
@@ -382,8 +387,8 @@ nnoremap <leader>\ :vsplit file<CR>
 noremap <Leader>a =ip
 
 " easy regex replace
-:nnoremap <Leader>s :s/\<<C-r><C-w>\>/
-:nnoremap <Leader>S :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+xnoremap <leader>s :<c-u>%s/\%V
 
 " select but dont jump 
 nnoremap <Leader>8 *#
@@ -397,10 +402,14 @@ nmap K <NOP>
 " no Ex mode
 noremap Q <Nop>
 
+
 " Remap :W to :w
 command! W w
 command! Wq wq
 command! Wa wa
+
+" Remap :Q to :q
+command! Q q
 
 " Expand tabs to spaces
 " noremap <Leader-t> :set expandtab 
@@ -412,20 +421,21 @@ nnoremap Y y$
 set lcs=tab:›\ ,trail:·,eol:¬,nbsp:_,space:-
 set fcs=fold:-
 nnoremap <silent> <leader>T :set nolist!<CR>
-
-" Clear last search (,qs)
+"
+" Clear last search
 map <silent> <leader>qs <Esc>:noh<CR>
-" map <silent> <leader>qs <Esc>:let @/ = ""<CR>
+nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
-" " Indent/unident block (,]) (,[)
-" nnoremap <leader>] >i{<CR>
-" nnoremap <leader>[ <i{<CR>
+" Indent/unident block (,]) (,[)
+nnoremap <leader>] >i[
+nnoremap <leader>[ <i[
+nnoremap <leader>} >i{
+nnoremap <leader>{ <i{
 
 " Buffer navigation (,,) (,]) (,[) (,ls)
 map <Leader><Leader> <C-^>
-:map <Leader>] :bnext<CR>
-:map <Leader>[ :bprev<CR>
-map <Leader>ls :buffers<CR>
+:map <Leader>l :bnext<CR>
+:map <Leader>h :bprev<CR>
 
 " Buffer resizing
 nnoremap <Leader><left> :vertical resize -4<cr>
@@ -448,17 +458,72 @@ map <leader>qq :cclose<CR>
 " vim-javascript
 let g:javascript_plugin_flow = 1
 
-" youCompleteMe preview options
-let g:ycm_autoclose_preview_window_after_insertion = 1
-"" let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_register_as_syntastic_checker = 0
+" tern
+if exists('g:plugs["tern_for_vim"]')
+  let g:tern_show_argument_hints = 'on_hold'
+  let g:tern_show_signature_in_pum = 1
+  autocmd FileType javascript setlocal omnifunc=tern#Complete
+endif
+
+" tern 
+autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
+
+if executable('nvim')
+	" Disable youCompleteMe	
+	let g:loaded_youcompleteme = 1
+
+	" deoplete
+	" set runtimepath+=~/.vim/bundle/deoplete.nvim/
+	
+	let g:deoplete#enable_at_startup = 1
+	let g:neocomplete#enable_smart_case = 1
+	let g:tern_request_timeout = 1
+	let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
+
+	"Add extra filetypes
+	let g:tern#filetypes = [
+					\ 'jsx',
+					\ 'javascript.jsx',
+					\ 'vue'
+					\ ]
+	
+	" Use tern_for_vim.
+	let g:tern#command = ["tern"]
+	let g:tern#arguments = ["--persistent"]
+	
+	" deoplete tab-complete
+	" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+	inoremap <silent><expr> <TAB>
+				\ pumvisible() ? "\<C-n>" :
+				\ <SID>check_back_space() ? "\<TAB>" :
+				\ deoplete#mappings#manual_complete()
+	function! s:check_back_space() abort "{{{
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1]  =~ '\s'
+	endfunction"}}}
+
+	" Autoclose the popup window
+	autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+else 
+	" youCompleteMe preview options
+	let g:ycm_autoclose_preview_window_after_insertion = 1
+	" let g:ycm_autoclose_preview_window_after_completion = 1
+	let g:ycm_register_as_syntastic_checker = 0
+
+	let g:ycm_semantic_triggers = {
+		 \ 'elm' : ['.'],
+		 \}
+endif
+
 
 " enable jsx for js files
 let g:jsx_ext_required = 0
 
 " emmet keybindings
-autocmd FileType html,css,js,jsx EmmetInstall
-let g:user_emmet_install_global = 0
+" autocmd FileType html,css,js,jsx EmmetInstall
+" let g:user_emmet_install_global = 0
+
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
 
@@ -512,32 +577,16 @@ highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
 
-" Rainbow parentheses
-" let g:rbpt_colorpairs = [
-"     \ ['brown',       'RoyalBlue3'],
-"     \ ['Darkblue',    'SeaGreen3'],
-"     \ ['darkgray',    'DarkOrchid3'],
-"     \ ['darkgreen',   'firebrick3'],
-"     \ ['darkcyan',    'RoyalBlue3'],
-"     \ ['darkred',     'SeaGreen3'],
-"     \ ['darkmagenta', 'DarkOrchid3'],
-"     \ ['brown',       'firebrick3'],
-"     \ ['gray',        'RoyalBlue3'],
-"     \ ['black',       'SeaGreen3'],
-"     \ ['darkmagenta', 'DarkOrchid3'],
-"     \ ['Darkblue',    'firebrick3'],
-"     \ ['darkgreen',   'RoyalBlue3'],
-"     \ ['darkcyan',    'SeaGreen3'],
-"     \ ['darkred',     'DarkOrchid3'],
-"     \ ['red',         'firebrick3'],
-"     \ ]
+" Neoformat for Prettier
+" autocmd BufWritePost *.js silent Neoformat
 
-" let g:rbpt_max = 16
-" let g:rbpt_loadcmd_toggle = 0
-" au VimEnter * RainbowParenthesesToggle
-" au Syntax * RainbowParenthesesLoadRound
-" au Syntax * RainbowParenthesesLoadSquare
-" au Syntax * RainbowParenthesesLoadBraces
+" Project specific 
+" autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ es5
+" Use formatprg when available
+" let g:neoformat_try_formatprg = 1
+" let g:neoformat_only_msg_on_error = 1
+
+" nnoremap gp :silent %!prettier --stdin --trailing-comma all --single-quote<CR>
 
 au VimEnter * RainbowParentheses
 
@@ -560,10 +609,6 @@ map <leader><Enter> o<ESC>
 " Elm keybindings
 let g:elm_setup_keybindings = 0
 
-let g:ycm_semantic_triggers = {
-     \ 'elm' : ['.'],
-     \}
-
 let g:elm_format_autosave = 1
 
 " The Silver Searcher
@@ -573,62 +618,40 @@ if executable('ag')
 endif
 
 if executable('rg')
-  set grepprg=rg\ --vimgrep\ --color=never 
+  set grepprg=rg\ --vimgrep\ --color=never\ --glob\ "!*/plugins/*"'
 endif
 
 " fzf
   let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 
+  let g:fzf_layout = { 'down': '45%' }
+
+  command! -bang -nargs=? -complete=dir Files
+			  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
   nnoremap <silent> <leader><tab> :Files<CR>
   nnoremap <silent> <leader>b :Buffers<CR>
   " nnoremap <silent> <leader>A :Windows<CR>
-  nnoremap <silent> <leader>; :BLines<CR>
-  nnoremap <silent> <leader>o :BTags<CR>
-  nnoremap <silent> <leader>O :Tags<CR>
+  " nnoremap <silent> <leader>; :BLines<CR>
+  nnoremap <silent> <leader>O :BTags<CR>
+  nnoremap <silent> <leader>o :Tags<CR>
   nnoremap <silent> <leader>? :History<CR>
-  nnoremap <silent> <leader>/ :execute 'rg ' . input('rg/')<CR>
-  nnoremap <silent> <leader>. :AgIn 
 
-  nnoremap <silent> K :call SearchWordWithAg()<CR>
-  vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
   nnoremap <silent> <leader>ft :Filetypes<CR>
 
   imap <c-x><c-p> <plug>(fzf-complete-path)
   imap <C-x><C-f> <plug>(fzf-complete-file-rg)
   imap <C-x><C-l> <plug>(fzf-complete-line)
 
-  function! SearchWordWithAg()
-    execute 'ag' expand('<cword>')
-  endfunction
-
-  function! SearchVisualSelectionWithAg() range
-    let old_reg = getreg('"')
-    let old_regtype = getregtype('"')
-    let old_clipboard = &clipboard
-    set clipboard&
-    normal! ""gvy
-    let selection = getreg('"')
-    call setreg('"', old_reg, old_regtype)
-    let &clipboard = old_clipboard
-    execute 'ag' selection
-  endfunction
-
-  function! SearchWithAgInDirectory(...)
-    call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
-  endfunction
-  command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
-"
-"
-"
 " map <leader><tab> :FZF -x<cr>
 " map <leader><tab> :Files<cr>
 
 " FZF layout
-" let g:fzf_layout = { 'down': '45%' }
+let g:fzf_layout = { 'down': '45%' }
 
 command! -bang -nargs=* Rg
 			\ call fzf#vim#grep(
-			\   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+			\   'rg --column --line-number --no-heading --glob "!*/dist/*" --glob "!*/plugins/*" -g "!*.sql" -g "!*.min.js" --color=always '.shellescape(<q-args>), 1,
 			\   <bang>0 ? fzf#vim#with_preview('up:60%')
 			\           : fzf#vim#with_preview('right:50%:hidden', '?'),
 			\   <bang>0)
@@ -654,8 +677,12 @@ nnoremap g/r :<c-u>OverCommandLine<cr>%s/
 xnoremap g/r :<c-u>OverCommandLine<cr>%s/\%V
 let g:over_command_line_prompt = ": "
 
+
+" Yank ring
+nnoremap <silent> <Leader>p :YRShow<CR>
+
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-nnoremap <leader>f :Rg<cr>
+nnoremap <leader>/ :Rg<cr>
 
 " allows for running of script over multiple lines
 function! <SID>StripWhitespace ()
@@ -705,9 +732,6 @@ endfunction
 " macro over multiple lines
 xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
-" Regex to remove HTML tags.
-command! RmHTML :%s/<[^>]*>/
-
 " Add vim-repeat support to non nativly supported plugins:
 " https://github.com/tpope/vim-repeat
 " silent! call repeat#set("\<Plug>MyWonderfulPlugin", v:count)
@@ -718,9 +742,6 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-" Enables CSS auto-completion
-set omnifunc=csscomplete#CompleteCSS
-
 " Format as json, regardless of the fileending
 command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
 
@@ -730,6 +751,16 @@ au BufRead,BufNewFile *.json set ft=json syntax=javascript
 if executable('jq')
 	autocmd BufRead *.json :%!jq .
 endif
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" LESS
+au BufNewFile,BufRead *.less set filetype=css
 
 " Common Ruby files
 au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
