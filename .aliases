@@ -45,6 +45,8 @@ alias class-dump='~/Dropbox/code/classDump/class-dump'
 alias ql='qlmanage -p "$@" >& /dev/null'
 alias terminal_velocity='terminal_velocity ~/Dropbox/Documents/notes'
 alias tv=terminal_velocity
+alias ccompile='vagrant ssh -c "cd /var/www;composer compile"'
+alias MakeTags='ctags -R .'
 
 alias cask='brew cask'
 
