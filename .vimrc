@@ -38,9 +38,13 @@ Plug 'ternjs/tern_for_vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'sbdchd/neoformat'
-" Plug 'neomake/neomake'
-Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-eunuch'
+Plug 'mbbill/undotree'
 Plug 'jsfaint/gen_tags.vim'
+Plug 'reasonml-editor/vim-reason'
+" Plug 'neomake/neomake'
+" Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'Galooshi/vim-import-js'
 
 " ---- Plugins archive --------------------------------
@@ -231,9 +235,6 @@ set suffixes=.bak,~,.swp,.swo,.o,.d,.info,.aux,.log,.dvi,.pdf,.bin,.bbl,.blg,.br
 
 " Show the filename in the window titlebar.
 set title 
-
-" Persistent Undo.
-set undofile 
 
 " Use visual bell instead of audible bell
 set visualbell 
@@ -457,10 +458,10 @@ map <Leader>l :bnext<CR>
 map <Leader>h :bprev<CR>
 
 " Buffer resizing
-nnoremap <Leader><left> :vertical resize -4<cr>
-nnoremap <Leader><down> :resize +5<cr>
-nnoremap <Leader><up> :resize -5<cr>
-nnoremap <Leader><right> :vertical resize +5<cr>
+nnoremap <Leader>H :vertical resize -4<cr>
+nnoremap <Leader>J :resize +5<cr>
+nnoremap <Leader>K :resize -5<cr>
+nnoremap <Leader>L :vertical resize +5<cr>
 
 " Center and maximize current buffer
 " nnoremap <Leader>c <C-w>_<C-w>|
@@ -473,6 +474,9 @@ imap <PageDown> <C-O><C-D>
 
 " Close Quickfix window
 map <leader>qq :cclose<CR>
+
+" Undotree toggle
+nnoremap <Leader>u :UndotreeToggle<cr>
 
 " vim-javascript, enable flow
 let g:javascript_plugin_flow = 1
@@ -493,7 +497,6 @@ if executable('nvim')
 	let g:loaded_youcompleteme = 1
 
 	" deoplete
-	" set runtimepath+=~/.vim/bundle/deoplete.nvim/
 	
 	let g:deoplete#enable_at_startup = 1
 	let g:neocomplete#enable_smart_case = 1
@@ -503,10 +506,10 @@ if executable('nvim')
 
 	"Add extra filetypes
 	let g:tern#filetypes = [
-					\ 'jsx',
-					\ 'javascript.jsx',
-					\ 'vue'
-					\ ]
+	      \ 'jsx',
+	      \ 'javascript.jsx',
+	      \ 'vue'
+	      \ ]
 	
 	" Use tern_for_vim.
 	let g:tern#command = ["tern"]
@@ -516,9 +519,9 @@ if executable('nvim')
 	" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 	inoremap <silent><expr> <TAB>
-				\ pumvisible() ? "\<C-n>" :
-				\ <SID>check_back_space() ? "\<TAB>" :
-				\ deoplete#mappings#manual_complete()
+	      \ pumvisible() ? "\<C-n>" :
+	      \ <SID>check_back_space() ? "\<TAB>" :
+	      \ deoplete#mappings#manual_complete()
 	function! s:check_back_space() abort "{{{
 		let col = col('.') - 1
 		return !col || getline('.')[col - 1]  =~ '\s'
@@ -533,12 +536,15 @@ else
 	" let g:ycm_register_as_syntastic_checker = 0
 
 	let g:ycm_semantic_triggers = {
-		 \ 'elm' : ['.'],
-		 \}
+	      \ 'elm' : ['.'],
+	      \}
 endif
 
 " enable jsx for js files
 let g:jsx_ext_required = 0
+
+" Reason format
+autocmd FileType reason map <buffer> <M-M> :ReasonPrettyPrint<Cr>
 
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
@@ -566,72 +572,30 @@ let g:ale_javascript_eslint_executable = local_eslint
 let g:ale_completion_enabled = 1"
 
 let g:ale_fixers = {
-\   'javascript': [local_eslint]
+\   'javascript': ['eslint']
 \}
+
+" let g:ale_linters = {'jsx': ['stylelint', 'eslint'], 'javascript': ['stylelint', local_eslint]}
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'jsx': ['eslint'],
+\}
+
+let g:ale_linter_aliases = {'jsx': 'css'}
+" let g:ale_set_highlights = 0
 
 let g:ale_sign_error = '?!'
 let g:ale_sign_warning = '!'
 
-" let g:ale_linters = {'jsx': ['stylelint', 'eslint'], 'javascript': ['stylelint', local_eslint]}
-let g:ale_linters = {
-\   'javascript': [local_eslint],
-\   'jsx': [local_eslint],
-\}
-
-let g:ale_linter_aliases = {'jsx': 'css'}
+highlight ALEErrorSign ctermfg=18 ctermbg=73 cterm=bold
+highlight ALEWarningSign ctermfg=18 ctermbg=73 cterm=bold
 
 " Ale error shortcuts
 nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
 nmap <silent> <Leader>j <Plug>(ale_next_wrap)
 
-" if executable(local_eslint)
-"     let g:syntastic_javascript_eslint_exec = local_eslint
-" endif
-
 set statusline+=%#warningmsg#
 set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 0
-" let g:syntastic_auto_loc_list = 0
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_javascript_checkers = ['eslint']
-" let g:syntastic_javascript_eslint_exec = 'eslint_d'
-" " let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
-" let g:syntastic_css_checkers = ['stylelint']
-" " let g:syntastic_css_stylelint_exec = 'stylelint_d'
-
-" let g:syntastic_aggregate_errors = 0
-" let g:syntastic_check_on_open=0
-" let g:syntastic_enable_highlighting = 0
-" let g:syntastic_echo_current_error=1
-
-" let g:syntastic_enable_balloons = 0
-" let g:syntastic_auto_jump=0
-
-" let g:syntastic_full_redraws=1
-
-" let g:syntastic_error_symbol = '!?'
-" let g:syntastic_warning_symbol = '!'
-" let g:syntastic_style_error_symbol = '!?'
-" let g:syntastic_style_warning_symbol = '!'
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
-
-" let g:neomake_javascript_enabled_makers = ['eslint']
-
-" let g:neomake_javascript_eslint_maker = {
-"     \ 'args': ['--verbose'],
-"     \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
-"     \ }
-
-" let g:neomake_javascript_jshint_maker = {
-"     \ 'args': ['--verbose'],
-"     \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
-"     \ }
-" let g:neomake_javascript_enabled_makers = ['jshint']
 
 " Neoformat for Prettier
 " autocmd BufWritePost *.js silent Neoformat
@@ -663,7 +627,7 @@ let g:elm_format_autosave = 1
   let g:fzf_layout = { 'down': '65%' }
 
   command! -bang -nargs=? -complete=dir Files
-			  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+	\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
   nnoremap <silent> <leader><tab> :Files<CR>
   nnoremap <silent> <leader><leader> :Buffers<CR>
@@ -692,11 +656,11 @@ if executable('rg')
 
 	" Ripgrep and fzf settings
 	command! -bang -nargs=* Rg
-				\ call fzf#vim#grep(
-				\   'rg --column --line-number --no-heading --glob "!*/dist/*" --glob "!*/plugins/*" -g "!*.sql" -g "!*.min.js" --color=always '.shellescape(<q-args>), 1,
-				\   <bang>0 ? fzf#vim#with_preview('up:60%')
-				\           : fzf#vim#with_preview('right:50%:hidden', '?'),
-				\   <bang>0)
+	      \ call fzf#vim#grep(
+	      \   'rg --column --line-number --no-heading --glob "!*/dist/*" --glob "!*/plugins/*" -g "!*.sql" -g "!*.min.js" --color=always '.shellescape(<q-args>), 1,
+	      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+	      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+	      \   <bang>0)
 endif
 
 " Fugitive
@@ -717,9 +681,9 @@ nnoremap g/r :<c-u>OverCommandLine<cr>%s/
 xnoremap g/r :<c-u>OverCommandLine<cr>%s/\%V
 let g:over_command_line_prompt = ": "
 
-" Yank stack
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
+" " Yank stack
+" nmap <leader>p <Plug>yankstack_substitute_older_paste
+" nmap <leader>P <Plug>yankstack_substitute_newer_paste
 
 " gen tags
 let g:gen_tags#ctags_auto_gen=1
@@ -762,7 +726,7 @@ autocmd BufReadPost *
 
 
 " Ctags generation
-command! MakeTags !ctags -R .
+command! MakeTags GenCtags
 
 " Format as json, regardless of the fileending
 command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool

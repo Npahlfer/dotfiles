@@ -1,12 +1,12 @@
 # Create a new directory and enter it
 function md() {
-	mkdir -p "$@" && cd "$@"
+  mkdir -p "$@" && cd "$@"
 }
 
 
 # find shorthand
 function f() {
-    find . -name "$1"
+  find . -name "$1"
 }
 
 # Change dir to active Finder window, else ~/
@@ -27,54 +27,54 @@ function cdf() {
 
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
-	local port="${1:-8000}"
-	open "http://localhost:${port}/"
-	# Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-	# And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
-	python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
+  local port="${1:-8000}"
+  open "http://localhost:${port}/"
+  # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
+  # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
+  python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
 }
 
 function phpserver() {
-	local port="${2:-8888}"
-	if [ -z $1 ]; then
-		php -S localhost:${port}
-	else
-		open "http://localhost:${port}/"
-		php -S localhost:${port} -t $1
-	fi
+  local port="${2:-8888}"
+  if [ -z $1 ]; then
+    php -S localhost:${port}
+  else
+    open "http://localhost:${port}/"
+    php -S localhost:${port} -t $1
+  fi
 }
 
 # Syntax-highlight JSON strings or files
 function json() {
-	if [ -p /dev/stdin ]; then
-		# piping, e.g. `echo '{"foo":42}' | json`
-		python -mjson.tool | pygmentize -l javascript
-	else
-		# e.g. `json '{"foo":42}'`
-		python -mjson.tool <<< "$*" | pygmentize -l javascript
-	fi
+  if [ -p /dev/stdin ]; then
+    # piping, e.g. `echo '{"foo":42}' | json`
+    python -mjson.tool | pygmentize -l javascript
+  else
+    # e.g. `json '{"foo":42}'`
+    python -mjson.tool <<< "$*" | pygmentize -l javascript
+  fi
 }
 
 # get gzipped size
 function gz() {
-	echo "orig size    (bytes): "
-	cat "$1" | wc -c
-	echo "gzipped size (bytes): "
-	gzip -c "$1" | wc -c
+  echo "orig size    (bytes): "
+  cat "$1" | wc -c
+  echo "gzipped size (bytes): "
+  gzip -c "$1" | wc -c
 }
 
 # whois a domain or a URL
 function whois() {
-	local domain=$(echo "$1" | awk -F/ '{print $3}') # get domain from URL
-	if [ -z $domain ] ; then
-		domain=$1
-	fi
-	echo "Getting whois record for: $domain …"
+  local domain=$(echo "$1" | awk -F/ '{print $3}') # get domain from URL
+  if [ -z $domain ] ; then
+    domain=$1
+  fi
+  echo "Getting whois record for: $domain …"
 
-	# avoid recursion
-					# this is the best whois server
-													# strip extra fluff
-	/usr/bin/whois -h whois.internic.net $domain | sed '/NOTICE:/q'
+  # avoid recursion
+  # this is the best whois server
+  # strip extra fluff
+  /usr/bin/whois -h whois.internic.net $domain | sed '/NOTICE:/q'
 }
 
 # animated gifs from any video
@@ -96,50 +96,50 @@ gifify() {
 # turn that video into webm.
 # brew reinstall ffmpeg --with-libvpx
 webmify(){
-	ffmpeg -i $1 -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y $2 $1.webm
+  ffmpeg -i $1 -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y $2 $1.webm
 }
 
 # Combining cd command and z
 function c() {
-	if [ -z "$1" ]; then
-		cd ..
-	elif [ -d "$1" ]; then
-		cd "$@"
-	else
-		z -c "$@"
-	fi
+  if [ -z "$1" ]; then
+    cd ..
+  elif [ -d "$1" ]; then
+    cd "$@"
+  else
+    z -c "$@"
+  fi
 }
 
 # Combining cd command and z, longer range
 # I have an alias for cc (= "../..")
 function cc() {
-	if [ -d "$1" ]; then
-		cd $@
-	else
-		z $@
-	fi
+  if [ -d "$1" ]; then
+    cd $@
+  else
+    z $@
+  fi
 }
 
 # generates a unique 192.168.X.X ip adress.
 function ipgen() {
-	local current=($(grep "192.168.*.*" /etc/hosts | cut -c12-13))
-	local gen=$(echo $RANDOM % 99 + 1 | bc)
-	local gen2=$(echo $RANDOM % 99 + 1 | bc)
-	if [[ $gen != ${current[*]} ]]; then
-		echo -e "192.168.$gen.$gen2"
-	else
-		!!
-	fi
+  local current=($(grep "192.168.*.*" /etc/hosts | cut -c12-13))
+  local gen=$(echo $RANDOM % 99 + 1 | bc)
+  local gen2=$(echo $RANDOM % 99 + 1 | bc)
+  if [[ $gen != ${current[*]} ]]; then
+    echo -e "192.168.$gen.$gen2"
+  else
+    !!
+  fi
 }
 
 dash() {
-	open dash://$1
+  open dash://$1
 }
 
 # Lists files in zip
 zlist() {
-	unzip -l $1 |
-	awk '/-----/ {p = ++p % 2; next} p {print $NF}'
+  unzip -l $1 |
+  awk '/-----/ {p = ++p % 2; next} p {print $NF}'
 }
 
 # panic command.
@@ -156,47 +156,47 @@ END
 # mkdir and cd to that directory
 # May need quotes around the variable for som systems and directories with spaces:
 mdir() {
-	mkdir -p -- $1 &&
-	cd -P -- $1
+  mkdir -p -- $1 &&
+    cd -P -- $1
 }
 
 # mv and move with moved file.
 mw() {
-	if [ $1 == -* ] && [ ! -z $2 ] && [ ! -z $3 ]; then
-		mv $1 $2 $3
-		cd $3
-	elif [ -z "$3" ];then
-		mv $1 $2
-		cd $2
-	else
-		echo "Input error."
-	fi
+  if [ $1 == -* ] && [ ! -z $2 ] && [ ! -z $3 ]; then
+    mv $1 $2 $3
+    cd $3
+  elif [ -z "$3" ];then
+    mv $1 $2
+    cd $2
+  else
+    echo "Input error."
+  fi
 }
 
 # cp and move with copied file.
 cpw() {
-	if [ $1 == -* ] && [ ! -z $2 ] && [ ! -z $3 ]; then
-		cp $1 $2 $3
-		cd $3
-	elif [ -z "$3" ];then
-		cp $1 $2
-		cd $2
-	else
-		echo "Input error."
-	fi
+  if [ $1 == -* ] && [ ! -z $2 ] && [ ! -z $3 ]; then
+    cp $1 $2 $3
+    cd $3
+  elif [ -z "$3" ];then
+    cp $1 $2
+    cd $2
+  else
+    echo "Input error."
+  fi
 }
 
 # example: rename-multiple *.svg abc cba
 rename-multiple() {
-	for file in $1; do mv $file ${file//$2/$3} ; done
+  for file in $1; do mv $file ${file//$2/$3} ; done
 }
 
 # open up process in new tab: "$ ntab process"
 function ntab() {
-	osascript -e "
-	activate application \"iTerm\"
-	tell application \"System Events\" to keystroke \"t\" using command down
-	tell application \"iTerm\" to tell session -1 of current terminal to write text \"$@\""
+  osascript -e "
+  activate application \"iTerm\"
+  tell application \"System Events\" to keystroke \"t\" using command down
+  tell application \"iTerm\" to tell session -1 of current terminal to write text \"$@\""
 }
 
 # Halt all active virtualboxes
@@ -206,26 +206,26 @@ haltvms() {
 
 # Halt all active virtualboxes except the one of this directory
 halt-all-except-current() {
-	vmBOX=(`VBoxManage list runningvms --long | grep "vagrant', Host path:" | awk '{print $5}' | cut -d "'" -f 2`)
-	vmBOXId=(`VBoxManage list runningvms --long | grep "Hardware UUID:" | awk '{print $3}'`)
+  vmBOX=(`VBoxManage list runningvms --long | grep "vagrant', Host path:" | awk '{print $5}' | cut -d "'" -f 2`)
+  vmBOXId=(`VBoxManage list runningvms --long | grep "Hardware UUID:" | awk '{print $3}'`)
 
-	for ((i=1;i<=${#vmBOX[@]};++i)); do
-		if [[ "${PWD}" =~ "${vmBOX[i]}" ]]; then
-			echo "No other VM than the one of this directory is running."
-		else
-			echo -e "Halting ${vmBOX[i]}"
-			VBoxManage controlvm {${vmBOXId[i]}} poweroff
-		fi
-	done
+  for ((i=1;i<=${#vmBOX[@]};++i)); do
+    if [[ "${PWD}" =~ "${vmBOX[i]}" ]]; then
+      echo "No other VM than the one of this directory is running."
+    else
+      echo -e "Halting ${vmBOX[i]}"
+      VBoxManage controlvm {${vmBOXId[i]}} poweroff
+    fi
+  done
 
-	unset vmBOX
-	unset vmBOXId
+  unset vmBOX
+  unset vmBOXId
 }
 
 # usage: new-vhost projectName.dev projectDirName
 new-vhost() {
-local VHOST=$(cat <<EOF
-    <VirtualHost *:80>
+  local VHOST=$(cat <<EOF
+  <VirtualHost *:80>
     ServerAdmin niclas@pahlfer.com
     DocumentRoot "/Users/npahlfer/Projects/$2/"
     ServerName $1
@@ -234,62 +234,61 @@ local VHOST=$(cat <<EOF
     CustomLog "/private/var/log/apache2/$1-access_log" common
 
     <Directory "/Users/npahlfer/Projects/$2/">
-        Options FollowSymLinks Indexes MultiViews
-        AllowOverride All
-        Order allow,deny
-        Allow from all
+	Options FollowSymLinks Indexes MultiViews
+	AllowOverride All
+	Order allow,deny
+	Allow from all
     </Directory>
 
-</VirtualHost>
+  </VirtualHost>
 EOF
 )
 
-sudo bash -c "echo -e '${VHOST}' >> /etc/apache2/extra/httpd-vhosts.conf"
-sudo bash -c "echo -e '127.0.0.1\t$1' >> /etc/hosts"
-
+  sudo bash -c "echo -e '${VHOST}' >> /etc/apache2/extra/httpd-vhosts.conf"
+  sudo bash -c "echo -e '127.0.0.1\t$1' >> /etc/hosts"
 }
 
 apport() {
-	local port=$1
-	sudo lsof -nP -iTCP:$port -sTCP:LISTEN
+  local port=$1
+  sudo lsof -nP -iTCP:$port -sTCP:LISTEN
 }
 
 getValue() {
-	local value
-	if [[ ! -z $2 ]]; then
-		if [[ ! -z $1 ]]; then
-			read -p "${3} [Default: ${1}]: " value
-		else
-			read -p "${3}: " value
-		fi
-	fi
-	value=${value:-$1}
-	echo $value
+  local value
+  if [[ ! -z $2 ]]; then
+    if [[ ! -z $1 ]]; then
+      read -p "${3} [Default: ${1}]: " value
+    else
+      read -p "${3}: " value
+    fi
+  fi
+  value=${value:-$1}
+  echo $value
 }
 
 tellWhenFinished() {
-	terminal-notifier -message "Job finished" -title "Terminal job"
+  terminal-notifier -message "Job finished" -title "Terminal job"
 }
 
 # Download all images from website to current dir.
 getAllImagesFromWebsite() {
-	wget -r -l 1 -A jpeg,jpg,bmp,gif,png "$@"
+  wget -r -l 1 -A jpeg,jpg,bmp,gif,png "$@"
 }
 
 dirSize() {
-	du -h -d=1 $1 | sort -n -r
+  du -h -d=1 $1 | sort -n -r
 }
 
 listKext() {
-	kextstat -l -k | awk '{n = sprintf("%d", $4); print n, $6}' | sort -n
+  kextstat -l -k | awk '{n = sprintf("%d", $4); print n, $6}' | sort -n
 }
 
 todo() {
-	if [[ -z $1 ]]; then
-		cat ~/Library/Application\ Support/Notational\ Data/todo.txt
-	elif [[ $1 -eq -r ]] && [[ ! -z  $2 ]]; then
-		sed -i '' "$2d" ~/Library/Application\ Support/Notational\ Data/todo.txt
-	else
-		echo -e "$1" >> ~/Library/Application\ Support/Notational\ Data/todo.txt
-	fi
+  if [[ -z $1 ]]; then
+    cat ~/Library/Application\ Support/Notational\ Data/todo.txt
+  elif [[ $1 -eq -r ]] && [[ ! -z  $2 ]]; then
+    sed -i '' "$2d" ~/Library/Application\ Support/Notational\ Data/todo.txt
+  else
+    echo -e "$1" >> ~/Library/Application\ Support/Notational\ Data/todo.txt
+  fi
 }
