@@ -17,7 +17,7 @@ au BufReadPost,BufNewFile * set relativenumber
 au BufRead,BufNewFile *.json set ft=json syntax=javascript
 
 if executable('jq')
-	autocmd BufRead *.json :%!jq .
+  autocmd BufRead *.json :%!jq .
 endif
 
 " Enable omni completion.
@@ -194,32 +194,32 @@ autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
 nnoremap <C-g><C-t> :TernType<CR>
 
 if executable('nvim')
-	" deoplete
-	let g:deoplete#enable_at_startup = 1
-	let g:neocomplete#enable_smart_case = 1
-	let g:tern_request_timeout = 1
-	let g:tern_show_signature_in_pum = 1  " This do disable full signature type on autocomplete
-	let g:deoplete#sources#ternjs#types = 1
+  " deoplete
+  let g:deoplete#enable_at_startup = 1
+  let g:neocomplete#enable_smart_case = 1
+  let g:tern_request_timeout = 1
+  let g:tern_show_signature_in_pum = 1  " This do disable full signature type on autocomplete
+  let g:deoplete#sources#ternjs#types = 1
 
-	"Add extra filetypes
-	let g:tern#filetypes = [
-	      \ 'jsx',
-	      \ 'javascript.jsx',
-	      \ 'vue'
-	      \ ]
-	
-	" Use tern_for_vim.
-	let g:tern#command = ["tern"]
-	let g:tern#arguments = ["--persistent"]
-	
-	inoremap <silent><expr> <TAB>
-	      \ pumvisible() ? "\<C-n>" :
-	      \ <SID>check_back_space() ? "\<TAB>" :
-	      \ deoplete#mappings#manual_complete()
-	function! s:check_back_space() abort "{{{
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~ '\s'
-	endfunction"}}}
+  "Add extra filetypes
+  let g:tern#filetypes = [
+	\ 'jsx',
+	\ 'javascript.jsx',
+	\ 'vue'
+	\ ]
+
+  " Use tern_for_vim.
+  let g:tern#command = ["tern"]
+  let g:tern#arguments = ["--persistent"]
+
+  inoremap <silent><expr> <TAB>
+	\ pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? "\<TAB>" :
+	\ deoplete#mappings#manual_complete()
+  function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction"}}}
 endif
 
 " enable jsx for js files
@@ -245,7 +245,7 @@ nmap ga: <Plug>(EasyAlign)<Right>:
 
 let local_eslint = finddir(getcwd() . '/node_modules') . '/.bin/eslint'
 if matchstr(local_eslint, "^\/\\w") == ''
-    let local_eslint = local_eslint
+  let local_eslint = local_eslint
 endif
 
 let g:ale_javascript_eslint_executable = local_eslint
@@ -254,13 +254,13 @@ let g:ale_javascript_eslint_executable = local_eslint
 let g:ale_completion_enabled = 1"
 
 let g:ale_fixers = {
-\   'javascript': ['eslint']
-\}
+      \   'javascript': ['eslint']
+      \}
 
 let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'jsx': ['eslint'],
-\}
+      \   'javascript': ['eslint'],
+      \   'jsx': ['eslint'],
+      \}
 
 let g:ale_linter_aliases = {'jsx': 'css'}
 
@@ -299,25 +299,25 @@ let g:elm_setup_keybindings = 0
 let g:elm_format_autosave = 1
 
 " fzf
-  let g:fzf_nvim_statusline = 0 " disable statusline overwriting
+let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 
-  let g:fzf_layout = { 'down': '65%' }
+let g:fzf_layout = { 'down': '65%' }
 
-  command! -bang -nargs=? -complete=dir Files
-	\ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-  nnoremap <silent> <leader><tab> :Files<CR>
-  nnoremap <silent> <leader><leader> :Buffers<CR>
-  nnoremap <silent> <leader>; :BLines<CR>
-  nnoremap <silent> <leader>O :BTags<CR>
-  nnoremap <silent> <leader>o :Tags<CR>
-  nnoremap <silent> <leader>? :History<CR>
+nnoremap <silent> <leader><tab> :Files<CR>
+nnoremap <silent> <leader><leader> :Buffers<CR>
+nnoremap <silent> <leader>; :BLines<CR>
+nnoremap <silent> <leader>O :BTags<CR>
+nnoremap <silent> <leader>o :Tags<CR>
+nnoremap <silent> <leader>? :History<CR>
 
-  nnoremap <silent> <leader>ft :Filetypes<CR>
+nnoremap <silent> <leader>ft :Filetypes<CR>
 
-  imap <c-x><c-p> <plug>(fzf-complete-path)
-  imap <C-x><C-f> <plug>(fzf-complete-file-rg)
-  imap <C-x><C-l> <plug>(fzf-complete-line)
+imap <c-x><c-p> <plug>(fzf-complete-path)
+imap <C-x><C-f> <plug>(fzf-complete-file-rg)
+imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " FZF layout
 let g:fzf_layout = { 'down': '45%' }
@@ -328,15 +328,15 @@ if executable('ag')
 endif
 
 if executable('rg')
-	set grepprg=rg\ --vimgrep\ --color=never\ --glob\ "!*/plugins/*"'
+  set grepprg=rg\ --vimgrep\ --color=never\ --glob\ "!*/plugins/*"'
 
-	" Ripgrep and fzf settings
-	command! -bang -nargs=* Rg
-	      \ call fzf#vim#grep(
-	      \   'rg --column --line-number --no-heading --glob "!*/dist/*" --glob "!*/plugins/*" -g "!*.sql" -g "!*.min.js" --color=always '.shellescape(<q-args>), 1,
-	      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-	      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-	      \   <bang>0)
+  " Ripgrep and fzf settings
+  command! -bang -nargs=* Rg
+	\ call fzf#vim#grep(
+	\   'rg --column --line-number --no-heading --glob "!*/dist/*" --glob "!*/plugins/*" -g "!*.sql" -g "!*.min.js" --color=always '.shellescape(<q-args>), 1,
+	\   <bang>0 ? fzf#vim#with_preview('up:60%')
+	\           : fzf#vim#with_preview('right:50%:hidden', '?'),
+	\   <bang>0)
 endif
 
 " Fugitive
@@ -371,11 +371,11 @@ nnoremap <leader>/ :Rg<cr>
 
 " allows for running of script over multiple lines
 function! <SID>StripWhitespace ()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    :%s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
 endfunction
 noremap <leader>ss :call <SID>StripWhitespace ()<CR>
 
@@ -396,9 +396,9 @@ xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 " Restore cursor position
 autocmd BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+      \ if line("'\"") > 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
 
 " Ctags generation
 command! MakeTags GenCtags
