@@ -10,7 +10,7 @@ if filereadable(expand("$HOME/.vim/settings.vim"))
   source $HOME/.vim/settings.vim
 endif
 
-" Set relativenumbers 
+" Set relativenumbers
 au BufReadPost,BufNewFile * set relativenumber
 
 " JSON
@@ -29,6 +29,8 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " LESS
 au BufNewFile,BufRead *.less set filetype=css
+
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 
 " Common Ruby files
 au BufRead,BufNewFile Rakefile,Capfile,Gemfile,.autotest,.irbrc,*.treetop,*.tt set ft=ruby syntax=ruby
@@ -66,7 +68,7 @@ map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
 
 "clearing highlighted search
-nmap <silent> <leader>/ :nohlsearch<CR>
+nmap <silent> // :nohlsearch<CR>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
@@ -121,8 +123,9 @@ noremap <Leader>a =ip
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 xnoremap <leader>s :<c-u>%s/\%V
 
-" select but dont jump 
+" select but dont jump
 nnoremap <Leader>8 *#
+nnoremap <Leader>3 #*
 
 " Unbind u in visual mode
 vmap u <NOP>
@@ -131,7 +134,7 @@ vmap u <NOP>
 nmap K <NOP>
 
 " no Ex mode
-noremap Q <Nop>
+" noremap Q <Nop>
 
 " Remap :W to :w
 command! W w
@@ -173,14 +176,33 @@ map <PageDown> <C-D>
 imap <PageUp> <C-O><C-U>
 imap <PageDown> <C-O><C-D>
 
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
 " Close Quickfix window
 map <leader>qq :cclose<CR>
 
 " Undotree toggle
 nnoremap <Leader>u :UndotreeToggle<cr>
 
+" fenced code blocks for markdown
+" let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'php']
+
 " vim-javascript, enable flow
 let g:javascript_plugin_flow = 1
+
+" vim-pad notes dir
+let g:pad#dir = '~/Dropbox/Documents/vimNotes'
+let g:pad#maps#list = ["<leader>w", "<C-Esc>"]
 
 " tern
 if exists('g:plugs["tern_for_vim"]')
@@ -189,7 +211,7 @@ if exists('g:plugs["tern_for_vim"]')
   autocmd FileType javascript setlocal omnifunc=tern#Complete
 endif
 
-" tern 
+" tern
 autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
 nnoremap <C-g><C-t> :TernType<CR>
 
@@ -243,6 +265,7 @@ nmap ga: <Plug>(EasyAlign)<Right>:
 
 " Ale
 
+" let g:ale_echo_cursor = 0
 let local_eslint = finddir(getcwd() . '/node_modules') . '/.bin/eslint'
 if matchstr(local_eslint, "^\/\\w") == ''
   let local_eslint = local_eslint
@@ -264,7 +287,7 @@ let g:ale_linters = {
 
 let g:ale_linter_aliases = {'jsx': 'css'}
 
-let g:ale_sign_error = '?!'
+let g:ale_sign_error = '?'
 let g:ale_sign_warning = '!'
 
 highlight ALEErrorSign ctermfg=18 ctermbg=73 cterm=bold
@@ -277,6 +300,10 @@ nmap <silent> <Leader>j <Plug>(ale_next_wrap)
 set statusline+=%#warningmsg#
 set statusline+=%*
 
+" Editor config
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
+
 " Neoformat for Prettier
 " autocmd BufWritePost *.js silent Neoformat
 
@@ -288,7 +315,7 @@ set statusline+=%*
 
 " nnoremap gp :silent %!prettier --stdin --trailing-comma all --single-quote<CR>
 
-au VimEnter * RainbowParentheses
+" au VimEnter * RainbowParentheses
 
 let g:rainbow#max_level = 16
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
@@ -358,12 +385,15 @@ xnoremap g/r :<c-u>OverCommandLine<cr>%s/\%V
 let g:over_command_line_prompt = ": "
 
 " " Yank stack
-" nmap <leader>p <Plug>yankstack_substitute_older_paste
-" nmap <leader>P <Plug>yankstack_substitute_newer_paste
+nmap <leader>p <Plug>yankstack_substitute_older_paste
+nmap <leader>P <Plug>yankstack_substitute_newer_paste
 
 " gen tags
-let g:gen_tags#ctags_auto_gen=1
-let g:gen_tags#gtags_auto_gen=0
+" let g:gen_tags#ctags_auto_gen=1
+" let g:gen_tags#gtags_auto_gen=0
+
+" Generate js ctags
+command! MakeJSTags !find . -type f -iregex ".*\.js$" -not -path "./node_modules/*" -exec jsctags {} -f \; | sed '/^$/d' | sort > tags
 
 " Search files with fzf and ripgrep
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
@@ -377,7 +407,7 @@ function! <SID>StripWhitespace ()
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call <SID>StripWhitespace ()<CR>
+noremap <leader>S :call <SID>StripWhitespace ()<CR>
 
 " auto call function above on save
 autocmd BufWritePre * silent if &ft =~ 'sh\|perl\|python\|php\|javascript\|less\|css' | :call <SID>StripWhitespace() | endif
@@ -402,7 +432,25 @@ autocmd BufReadPost *
 
 " Ctags generation
 command! MakeTags GenCtags
+"
+" Syntax highlighting group for word under cursor
+nmap <C-S-P> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 
 " Format as json, regardless of the fileending
 command! -range -nargs=0 -bar JsonTool <line1>,<line2>!python -m json.tool
+
+" Copy search matches
+function! CopyMatches(reg)
+  let hits = []
+  %s//\=len(add(hits, submatch(0))) ? submatch(0) : ''/gne
+  let reg = empty(a:reg) ? '+' : a:reg
+  execute 'let @'.reg.' = join(hits, "\n") . "\n"'
+endfunction
+command! -register CopyMatches call CopyMatches(<q-reg>)
 

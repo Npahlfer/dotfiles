@@ -18,7 +18,7 @@ alias dir='ls -lh --color=auto'
 alias grep='grep --color=auto'
 alias df="df -h"
 alias h=history
-alias sprofile='source ~/.bash_profile;source ~/.zshrc'
+alias sprofile='source ~/.bash_profile && source ~/.zshrc'
 alias greppattern="grep -oHnr '$@' ."
 alias greptag="grep -oHnr '\<{\|.*\|}\>' ."
 alias lsf='ls -Flah | grep "[^/]$"'
@@ -109,6 +109,7 @@ alias g="git"
 alias vim="nvim"
 alias v="nvim"
 alias emacs="/usr/local/Cellar/emacs-plus/24.5/Emacs.app/Contents/MacOS/Emacs"
+alias tt="timetrap"
 
 # File size
 alias fs="stat -f \"%z bytes\""

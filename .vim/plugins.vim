@@ -32,7 +32,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'elmcast/elm-vim'
-Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'osyo-manga/vim-over'
 Plug 'ternjs/tern_for_vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -43,6 +42,12 @@ Plug 'tpope/vim-eunuch'
 Plug 'mbbill/undotree'
 Plug 'jsfaint/gen_tags.vim'
 Plug 'reasonml-editor/vim-reason'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'maxbrunsfeld/vim-yankstack'
+" Plug 'tpope/vim-markdown'
+Plug 'suan/vim-instant-markdown'
+Plug 'fmoralesc/vim-pad'
+Plug 'editorconfig/editorconfig-vim'
 
 " ---- Archive ----------------------------------------
 " Plug 'Valloric/YouCompleteMe'
@@ -52,7 +57,6 @@ Plug 'reasonml-editor/vim-reason'
 " Plug 'honza/vim-snippets' " Default snippets
 " Plug 'maksimr/vim-jsbeautify'
 " Plug 'neomake/neomake'
-" Plug 'maxbrunsfeld/vim-yankstack'
 
 " -----------------------------------------------------
 

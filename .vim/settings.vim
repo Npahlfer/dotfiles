@@ -1,16 +1,15 @@
 " Set syntax highlighting options.
 set t_Co=256
-set background=dark
+" set background=dark
 syntax on
 colorscheme sidonia 
-hi Normal ctermbg=NONE
-hi htmlTag guifg=#00bdec guibg=#200000 gui=bold
+" hi htmlTag guifg=#00bdec guibg=#200000 gui=bold
 
 " Change colour of tildes at the end of the buffer.
-highlight EndOfBuffer ctermfg=black
+" highlight EndOfBuffer ctermfg=black
 
 " Border colour
-hi! VertSplit ctermfg=2 ctermbg=NONE term=NONE
+" hi! VertSplit ctermfg=2 ctermbg=NONE term=NONE
 
 highlight MatchTemp ctermbg=5 ctermfg=3
 call matchadd('MatchTemp', 'TEMP', -1)
@@ -19,10 +18,11 @@ highlight MatchTodo ctermbg=3 ctermfg=5
 call matchadd('MatchTodo', 'TODO', -1)
 
 " "Hightligh columns that are over 80.
-highlight colorcolumn ctermbg=0 ctermfg=1
+" highlight colorcolumn ctermbg=0 ctermfg=1
 
 " Hightlight parens colour.
 highlight! MatchParen ctermfg=16 ctermbg=93 cterm=bold
+hi Normal ctermbg=NONE
 
 " speed up vim
 set ttyfast
@@ -32,6 +32,10 @@ set lazyredraw
 let mapleader = "\<Space>"
 
 set clipboard+=unnamed
+
+" Completions menu
+set wildmenu
+set wildmode=list:longest,full
 
 " Local dirs
 set undofile " save and restore undo history
@@ -69,16 +73,19 @@ set encoding=utf-8 nobomb
 set fillchars+=vert:\ 
 
 set foldenable
-set foldlevel=10
+set foldlevel=2
 
 " Markers are used to specify folds.
-set foldmethod=syntax 
+set foldmethod=indent 
 
 " Allow folding single lines
 set foldminlines=0 
 
 " Set max fold nesting level
-set foldnestmax=3 
+set foldnestmax=10 
+
+" Dont fold on start
+set nofoldenable
 
 " Format comments
 set formatoptions+=c 
@@ -159,6 +166,7 @@ set showmode
 set showtabline=1 
 
 " Ignore 'ignorecase' if search patter contains uppercase characters.
+set ignorecase
 set smartcase 
 
 " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes shiftwidth spaces.
@@ -201,6 +209,8 @@ set wrapscan
 
 " match to be used with %
 set matchpairs+=<:> 
+
+set showmatch
 
 " No extra spaces between rows
 set linespace=0 
