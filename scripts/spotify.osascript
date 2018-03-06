@@ -1,0 +1,12 @@
+set currentlyPlayingTrack to getCurrentlyPlayingTrack()
+
+on getCurrentlyPlayingTrack()
+  tell application "Spotify"
+	if it is running then
+		set currentArtist to artist of current track as string
+		set currentTrack to name of current track as string
+
+		return "▹ " & currentArtist & " - " & currentTrack
+	end if
+  end tell
+end getCurrentlyPlayingTrack

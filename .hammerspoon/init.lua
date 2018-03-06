@@ -11,7 +11,6 @@ k = hs.hotkey.modal.new({}, "F17")
 
 k:bind('', 'space', function() hs.application.launchOrFocus("iTerm") end)
 k:bind('', 't', function() hs.application.launchOrFocus("iTerm") end)
-k:bind('', '3', function() hs.application.launchOrFocus("Google Chrome") end)
 k:bind('', 's', function() hs.application.launchOrFocus("Slack") end)
 k:bind('', 'w', function() hs.application.launchOrFocus("Google Chrome") end)
 k:bind('shift', 'w', function() hs.application.launchOrFocus("FirefoxDeveloperEdition") end)

@@ -45,8 +45,8 @@ Plug 'reasonml-editor/vim-reason'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'maxbrunsfeld/vim-yankstack'
 " Plug 'tpope/vim-markdown'
-Plug 'suan/vim-instant-markdown'
-Plug 'fmoralesc/vim-pad'
+" Plug 'suan/vim-instant-markdown'
+" Plug 'fmoralesc/vim-pad'
 Plug 'editorconfig/editorconfig-vim'
 
 " ---- Archive ----------------------------------------

@@ -328,7 +328,7 @@ let g:elm_format_autosave = 1
 " fzf
 let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 
-let g:fzf_layout = { 'down': '65%' }
+let g:fzf_layout = { 'down': '75%' }
 
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
@@ -347,7 +347,7 @@ imap <C-x><C-f> <plug>(fzf-complete-file-rg)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " FZF layout
-let g:fzf_layout = { 'down': '45%' }
+let g:fzf_layout = { 'down': '75%' }
 
 " The Silver Searcher
 if executable('ag')
