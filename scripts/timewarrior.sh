@@ -3,7 +3,7 @@
 active=`timew get dom.active`
 fallback='internal'
 session=$1
-exceptions=("mondayMeeting lunch helping off")
+exceptions=("mondayMeeting lunch helping off none")
 
 if [ $active == 1 ]; then
     tag=`timew get dom.active.tag.1`
@@ -12,13 +12,13 @@ if [ $active == 1 ]; then
     status=' ? '
     minute=`date '+%M'`
     minute=${minute:1}
+    minutes=(0 1 2 3)
 
-    # Only check idle state once every 10 minutes
-    if [[ "$minute" == "2" ]]; then
+    if [[ " ${minutes[@]} " =~ " ${minute} " ]]; then
         idle=`ioreg -c IOHIDSystem | awk '/HIDIdleTime/ {print $NF/1000000000; exit}'`
         idleInt=${idle%.*}
 
-        if [[ "$idleInt" -ge "3600" ]]; then
+        if [[ "$idleInt" -ge "1200" ]]; then
             if [[ $tag == "idle ${tag}" ]]; then
                 echo "${tag}: ${subDuration}";
                 return 0
@@ -44,7 +44,7 @@ if [ $active == 1 ]; then
         status=''
     fi
 
-    echo "${status}${tag}: ${subDuration}";
+    echo "${check}${status}${tag}: ${subDuration}";
 else
     # currentH=`date '+%H'`
 
