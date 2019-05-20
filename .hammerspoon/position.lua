@@ -63,6 +63,11 @@ function nextStep(dim, offs, cb)
   end
 end
 
+function centerWindow()
+  local win = hs.window.focusedWindow()
+  win:centerOnScreen()
+end
+
 function nextFullScreenStep()
   if hs.window.focusedWindow() then
     local win = hs.window.frontmostWindow()
@@ -173,6 +178,11 @@ end)
 
 k:bind('', "c", '', function ()
   nextFullScreenStep()
+  k.triggered = false
+end)
+
+k:bind('shift', "c", '', function ()
+  centerWindow()
   k.triggered = false
 end)
 

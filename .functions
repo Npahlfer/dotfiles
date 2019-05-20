@@ -3,6 +3,9 @@ function md() {
   mkdir -p "$@" && cd "$@"
 }
 
+ff() {
+  tree -f | rg $@
+}
 
 # find shorthand
 function f() {
@@ -99,7 +102,7 @@ webmify(){
   ffmpeg -i $1 -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y $2 $1.webm
 }
 
-# Combining cd command and z
+# Combining cd command and z <3
 function c() {
   if [ -z "$1" ]; then
     cd ..

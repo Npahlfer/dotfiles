@@ -1,0 +1,61 @@
+snippet csc "Create Story Component"
+	import React from 'react'
+	import { storiesOf } from '@storybook/react'
+	import { text, boolean } from '@storybook/addon-knobs'
+
+	import Button from './'
+
+	const stories = storiesOf('Components/$2', module)
+
+	export const ${1:`!v expand('%:t:r')`} = () => (
+		<$2
+			disabled={boolean('disabled', false)}
+		>
+			{text('children', 'Just a button')}
+		</$2>
+	)
+
+	stories.add('$1', $1)
+
+	export default $1
+endsnippet
+
+snippet cons "console.log"
+console.log('$1',$2)
+endsnippet
+
+snippet func "function"
+function $1($2) {
+	$3
+}
+endsnippet
+
+snippet af "() => {}"
+($1) => {
+	$2
+}
+endsnippet
+
+snippet constr "constructor()"
+constructor(props) {
+	super(props)
+
+	$1
+}
+endsnippet
+
+snippet const "const name = ..."
+const $1 = $2
+endsnippet
+
+snippet key "key={...}"
+key={\`$1\${$2}\`}
+endsnippet
+
+snippet gc "jsx comment VISUAL"
+{/* ${1:${VISUAL}} */}
+endsnippet
+
+snippet consj "jsx console.log"
+{console.log('$1', $1) || null}
+endsnippet

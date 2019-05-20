@@ -19,12 +19,14 @@ if [ $active == 1 ]; then
         idleInt=${idle%.*}
 
         if [[ "$idleInt" -ge "1200" ]]; then
-            if [[ $tag == "idle ${tag}" ]]; then
+            if [[ $tag == "${tag}, idle" ]]; then
                 echo "${tag}: ${subDuration}";
                 return 0
             fi
 
-            timew start "idle ${session}" :quiet
+            if [[ ! "${session}" =~ "${tag}" ]]; then
+                timew start "${session}, idle" :quiet
+            fi
             echo "${tag}: ${subDuration}";
             return 0
         fi
@@ -38,13 +40,18 @@ if [ $active == 1 ]; then
         if echo $session | grep -Fq $tag; then
             status=''
         else
-            timew start $session :quiet
+            if echo $tag | grep -Fq $session; then
+                session=$tag
+                timew start $tag :quiet
+            else
+                timew start $session :quiet
+            fi
         fi
     else
         status=''
     fi
 
-    echo "${check}${status}${tag}: ${subDuration}";
+    echo "${check}${status}${session}: ${subDuration}";
 else
     # currentH=`date '+%H'`
 

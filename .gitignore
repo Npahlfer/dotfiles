@@ -3,4 +3,9 @@
 .vim/autoload
 .vim/bundle
 .vim/colors
+.vim/.VimballRecord
+.vim/.netrwhist
+.vim/doc/
+karabiner/automatic_backups/
+tmp/
 

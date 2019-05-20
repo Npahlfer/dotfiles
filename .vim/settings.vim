@@ -2,7 +2,11 @@
 set t_Co=256
 " set background=dark
 syntax on
-colorscheme sidonia 
+
+set termguicolors
+colorscheme breve
+" colorscheme blame
+
 " hi htmlTag guifg=#00bdec guibg=#200000 gui=bold
 
 " Change colour of tildes at the end of the buffer.
@@ -21,8 +25,14 @@ call matchadd('MatchTodo', 'TODO', -1)
 " highlight colorcolumn ctermbg=0 ctermfg=1
 
 " Hightlight parens colour.
-highlight! MatchParen ctermfg=16 ctermbg=93 cterm=bold
-hi Normal ctermbg=NONE
+" highlight! MatchParen ctermfg=16 ctermbg=93 cterm=bold
+" hi Normal ctermbg=NONE
+
+" autocomplete window colours.
+highlight Pmenu ctermfg=15 ctermbg=239
+highlight PmenuSel ctermfg=250 ctermbg=236
+
+set foldcolumn=1
 
 " speed up vim
 set ttyfast
@@ -44,150 +54,150 @@ set undodir=~/.vim/undo
 set tags^=./tags,tags;/,~/.vim/tags
 
 " Line numbers
-set number 
+set number
 
 " Incompleted commands are shown
-set showcmd 
+set showcmd
 
 " Reload files that have been changed outside vim
-set autoread 
+set autoread
 
 " Stricter rules for C programs
-:set cindent       
+:set cindent
 
 set backspace=indent,eol,start
 
 " Highlight current line
-set cursorline 
+set cursorline
 
 " Add vertical spaces to keep right and left aligned
-set diffopt=filler 
+set diffopt=filler
 
 " Ignore whitespace changes (focus on code changes)
-set diffopt+=iwhite 
+set diffopt+=iwhite
 
 " BOM often causes trouble
-set encoding=utf-8 nobomb 
+set encoding=utf-8 nobomb
 
 " Border char
-set fillchars+=vert:\ 
+set fillchars+=vert:\
 
 set foldenable
 set foldlevel=2
 
 " Markers are used to specify folds.
-set foldmethod=indent 
+set foldmethod=indent
 
 " Allow folding single lines
-set foldminlines=0 
+set foldminlines=0
 
 " Set max fold nesting level
-set foldnestmax=10 
+set foldnestmax=10
 
 " Dont fold on start
 set nofoldenable
 
 " Format comments
-set formatoptions+=c 
+set formatoptions+=c
 
 " Format comments with gq
-set formatoptions+=q 
+set formatoptions+=q
 
 " Recognize numbered lists
-set formatoptions+=n 
+set formatoptions+=n
 
 " Use indent from 2nd line of a paragraph
-set formatoptions+=2 
+set formatoptions+=2
 
 " Don't break lines that are already long
-set formatoptions+=l 
+set formatoptions+=l
 
 " Break before 1-letter words
-set formatoptions+=1 
+set formatoptions+=1
 
 " By default add g flag to search/replace. Add g to toggle.
-set gdefault 
+set gdefault
 
 " When a buffer is brought to foreground, remember undo history and marks.
-set hidden 
+set hidden
 
 " Remember copy history after quiting.
 set viminfo='20,\"500
 
 " Increase history from 20 default to 1000
-set history=1000 
+set history=1000
 
 " Highlight searches
-set hlsearch 
+set hlsearch
 
 " Highlight dynamically as pattern is typed.
-set incsearch 
+set incsearch
 
 " Always show status line
-set laststatus=2 
+set laststatus=2
 
 " Enable extended regexes.
-set magic 
+set magic
 
 " Disable error bells.
-set noerrorbells 
+set noerrorbells
 
 " Only insert single space after a '.', '?' and '!' with a join command.
-set nojoinspaces 
+set nojoinspaces
 
 " Don't reset cursor to start of line when moving around.
-set nostartofline 
+set nostartofline
 
 " set nowrap " Do not wrap lines.
 set wrap
 
 " Set omni-completion method.
-set ofu=syntaxcomplete#Complete 
+set ofu=syntaxcomplete#Complete
 
 " Show all changes.
-set report=0 
+set report=0
 
 " Show the cursor position
-set ruler 
+set ruler
 
 " Start scrolling three lines before horizontal border of window.
-set scrolloff=3 
+set scrolloff=3
 
 " Start scrolling three columns before vertical border of window.
-set sidescrolloff=3 
+set sidescrolloff=3
 
 " Don't show the intro message when starting vim.
-set shortmess=atI 
+set shortmess=atI
 
 " Show the current mode.
-set showmode 
+set showmode
 
 " Show tab bar if there is more than one.
-set showtabline=1 
+set showtabline=1
 
 " Ignore 'ignorecase' if search patter contains uppercase characters.
 set ignorecase
-set smartcase 
+set smartcase
 
 " At start of line, <Tab> inserts shiftwidth spaces, <Bs> deletes shiftwidth spaces.
-set smarttab 
+set smarttab
 
 " Tab key results in 2 spaces
-" set softtabstop=4 
+set softtabstop=2
 
 " New window goes below
-set splitbelow 
+set splitbelow
 
 " New windows goes right
-set splitright 
+set splitright
 
 set suffixes=.bak,~,.swp,.swo,.o,.d,.info,.aux,.log,.dvi,.pdf,.bin,.bbl,.blg,.brf,.cb,.dmg,.exe,.ind,.idx,.ilg,.inx,.out,.toc,.pyc,.pyd,.dll
 
 " Show the filename in the window titlebar.
-set title 
+set title
 
 " Use visual bell instead of audible bell
-set visualbell 
+set visualbell
 
 " Character for CLI expansion (TAB-completion).
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js,*.sql
@@ -196,24 +206,24 @@ set wildignore+=*/wp-/plugins/*,*/w3tc-config/*,*/cache/*
 set wildignore+=*/smarty/*,*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/.sass-cache/*,*/log/*,*/tmp/*,*/build/*,*/ckeditor/*,*/doc/*,*/source_maps/*,*/dist/*
 
 " Hitting TAB in command mode will show possible completions above command line.
-set wildmenu 
+set wildmenu
 
 " Complete only until point of ambiguity.
-set wildmode=list:longest 
+set wildmode=list:longest
 
 "Allow splits to be reduced to a single line.
-set winminheight=0 
+set winminheight=0
 
 " Searches wrap around end of file
-set wrapscan 
+set wrapscan
 
 " match to be used with %
-set matchpairs+=<:> 
+set matchpairs+=<:>
 
 set showmatch
 
 " No extra spaces between rows
-set linespace=0 
+set linespace=0
 
 set scrolljump=5
 set scrolloff=3
@@ -222,19 +232,19 @@ set scrolloff=3
 set relativenumber
 
 " Copy indent from last line when starting new line.
-set autoindent 
+set autoindent
 
 " Indents mostly right
-set smartindent   
+set smartindent
 
 " Tabs are at proper location
-set tabstop=4     
+set tabstop=2
 
 " Don't use actual tab character (ctrl-v)
-set noexpandtab     
+" set noexpandtab
 
-" Indenting is 4 spaces
-set shiftwidth=4  
+" Indenting is 2 spaces
+set shiftwidth=2
 
 " Text columns
 set colorcolumn=80
