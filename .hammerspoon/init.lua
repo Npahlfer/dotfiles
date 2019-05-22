@@ -18,6 +18,10 @@ k:bind('', 'e', function()
   k.triggered = true
   hs.application.launchOrFocus("iTerm") 
 end)
+k:bind('', 't', function()
+  k.triggered = true
+  hs.application.launchOrFocus("iTerm") 
+end)
 k:bind('', 's', function() 
   k.triggered = true
   hs.application.launchOrFocus("Slack") 
@@ -30,7 +34,7 @@ k:bind('', 'w', function()
   k.triggered = true
   hs.application.launchOrFocus("Firefox Developer Edition")
 end)
-k:bind('', 'r', function()
+k:bind('', 'a', function()
   k.triggered = true
   hs.application.launchOrFocus("Safari")
 end)

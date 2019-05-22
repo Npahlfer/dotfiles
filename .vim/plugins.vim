@@ -51,6 +51,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
+Plug 'wakatime/vim-wakatime'
 " Plug 'vim-scripts/paredit.vim'
 Plug 'jpalardy/vim-slime'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
