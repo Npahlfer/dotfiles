@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: <pre> V
+# key: prev
+# --
+echo '<pre>';
+`yas-selected-text`$0
+echo '</pre>';
