@@ -46,9 +46,10 @@
 
 (defun correct-tag (active-tag)
   "Set active tag to the workspace name and set state to active."
-  (if (and *is-active* *active-tag*)
-      active-tag
-      (set-active-tag (get-current-workspace))))
+  (let ((workspace (get-current-workspace)))
+    (if (and *is-active* *active-tag* (equal workspace *active-tag*))
+        active-tag
+      (set-active-tag workspace))))
 
 (defun get-mode-text ()
   "Get minor mode text"
@@ -57,6 +58,7 @@
 (defun stop-timewarrior ()
   (progn
     (setq *is-active* nil)
+    (setq *active-tag* nil)
     (stop-tracker)))
 
 (defun start-timewarrior ()
