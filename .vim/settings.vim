@@ -4,8 +4,8 @@ set t_Co=256
 syntax on
 
 set termguicolors
-colorscheme breve
-" colorscheme blame
+" colorscheme breve
+colorscheme blame
 
 " hi htmlTag guifg=#00bdec guibg=#200000 gui=bold
 
@@ -49,8 +49,8 @@ set wildmode=list:longest,full
 
 " Local dirs
 set undofile " save and restore undo history
-set directory=~/.vim/swaps
-set undodir=~/.vim/undo
+set directory=~/.vimTemp/swaps
+set undodir=~/.vimTemp/undo
 set tags^=./tags,tags;/,~/.vim/tags
 
 " Line numbers

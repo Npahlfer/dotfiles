@@ -40,9 +40,10 @@ alias tv=terminal_velocity
 alias ccompile='vagrant ssh -c "cd /var/www;composer compile"'
 alias MakeTags='ctags -R .'
 alias tw='timew'
-alias tsm='timew summary'
+alias tsm='timew summary :ids :annotations'
 alias tws='timew start'
 alias twt='timew stop'
+alias twa='timew annotate'
 alias td='timew day'
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
@@ -111,8 +112,9 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 alias g="git"
 alias vim="nvim"
 alias v="nvim"
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias tt="timetrap"
+#alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 
 # File size
 alias fs="stat -f \"%z bytes\""
@@ -123,7 +125,7 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
 # alias tmux='tmux -2'
 
 ## GIT
-alias gc="git commit -a"
+alias gc="git commit"
 alias gs="git status"
 alias gsd="echo 'gsd'"
 

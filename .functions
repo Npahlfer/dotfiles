@@ -1,8 +1,3 @@
-# Create a new directory and enter it
-function md() {
-  mkdir -p "$@" && cd "$@"
-}
-
 ff() {
   tree -f | rg $@
 }
@@ -156,11 +151,9 @@ end tell
 END
 }
 
-# mkdir and cd to that directory
-# May need quotes around the variable for som systems and directories with spaces:
-mdir() {
-  mkdir -p -- $1 &&
-    cd -P -- $1
+# Create a new directory and enter it
+function md() {
+  mkdir -p "$@" && cd "$@"
 }
 
 # mv and move with moved file.
@@ -225,35 +218,8 @@ halt-all-except-current() {
   unset vmBOXId
 }
 
-# usage: new-vhost projectName.dev projectDirName
-new-vhost() {
-  local VHOST=$(cat <<EOF
-  <VirtualHost *:80>
-    ServerAdmin niclas@pahlfer.com
-    DocumentRoot "/Users/npahlfer/Projects/$2/"
-    ServerName $1
-    ServerAlias www.$1
-    ErrorLog "/private/var/log/apache2/$1-error_log"
-    CustomLog "/private/var/log/apache2/$1-access_log" common
-
-    <Directory "/Users/npahlfer/Projects/$2/">
-	Options FollowSymLinks Indexes MultiViews
-	AllowOverride All
-	Order allow,deny
-	Allow from all
-    </Directory>
-
-  </VirtualHost>
-EOF
-)
-
-  sudo bash -c "echo -e '${VHOST}' >> /etc/apache2/extra/httpd-vhosts.conf"
-  sudo bash -c "echo -e '127.0.0.1\t$1' >> /etc/hosts"
-}
-
 apport() {
-  local port=$1
-  sudo lsof -nP -iTCP:$port -sTCP:LISTEN
+  sudo lsof -nP -iTCP:$1 -sTCP:LISTEN
 }
 
 getValue() {
@@ -294,4 +260,35 @@ todo() {
   else
     echo -e "$1" >> ~/Library/Application\ Support/Notational\ Data/todo.txt
   fi
+}
+
+convertZuluTime() {
+  LongDateTime=$1;
+
+  if [[ -z $LongDateTime ]]
+  then
+    LongDateTime=20190101T000000Z;
+  fi
+
+  Year=${LongDateTime:0:4}
+  Month=${LongDateTime:4:2}
+  Day=${LongDateTime:6:2}
+  Hour=${LongDateTime:9:2}
+  Minute=${LongDateTime:11:2}
+  Second=${LongDateTime:13:2}
+
+  # echo $LongDateTime
+  # echo $Year
+  # echo $Month
+  # echo $Day
+  # echo $Hour
+  # echo $Minute
+
+  YMD="$Year-$Month-$Day"T"$Hour:$Minute:$Second"
+
+  echo $YMD
+}
+
+twReplaceTag() {
+  timew tag $1 $3; tw untag $1 $2
 }

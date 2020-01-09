@@ -380,7 +380,7 @@ let g:ale_javascript_prettier_use_global = 0
 let g:ale_javascript_prettier_use_local_config = 1
  " --config-precedence prefer-file
 let g:ale_javascript_prettier_options = '--single-quote --trailing-comma all --no-semi --bracket-spacing --print-width 80'
-let g:ale_fix_on_save = 1
+" let g:ale_fix_on_save = 1
 " filetype plugin on
 
 highlight ALEError ctermbg=none cterm=NONE
