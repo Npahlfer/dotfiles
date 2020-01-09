@@ -9,55 +9,27 @@ k = hs.hotkey.modal.new({}, "F17")
 -- end
 -- k:bind('', 'l', nil, lfun)
 
--- Write a wrapper that takes a callback instead of this uglyness
-k:bind('', 'space', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Emacs") 
-end)
-k:bind('', 'e', function()
-  k.triggered = true
-  hs.application.launchOrFocus("iTerm") 
-end)
-k:bind('', 't', function()
-  k.triggered = true
-  hs.application.launchOrFocus("iTerm") 
-end)
-k:bind('', 's', function() 
-  k.triggered = true
-  hs.application.launchOrFocus("Slack") 
-end)
-k:bind('', 'c', function() 
-  k.triggered = true
-  hs.application.launchOrFocus("Google Chrome") 
-end)
-k:bind('', 'w', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Firefox Developer Edition")
-end)
-k:bind('', 'a', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Safari")
-end)
-k:bind('', 'p', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Spotify")
-end)
-k:bind('', 'f', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Finder")
-end)
-k:bind('', '1', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Figma")
-end)
-k:bind('', '2', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Preview")
-end)
-k:bind('', '3', function()
-  k.triggered = true
-  hs.application.launchOrFocus("Messages")
-end)
+apps = { 
+  "Figma",
+  "Preview",
+  "Messages",
+  space = "Emacs",
+  e = "iTerm",
+  t = "iTerm",
+  s = "Slack",
+  c = "Google Chrome",
+  a = "Safari",
+  w = "Firefox Developer Edition",
+  p = "Spotify",
+  f = "Finder",
+}
+
+for key, value in pairs(apps) do
+  k:bind('', tostring(key), function()
+    k.triggered = true
+    hs.application.launchOrFocus(value)
+  end)
+end
 
 switcher_browsers = hs.window.switcher.new{'Firefox Developer Edition','Safari','Google Chrome'}
 
@@ -138,4 +110,9 @@ end
 
 -- Bind the Hyper key
 f18 = hs.hotkey.bind({}, 'F18', pressedF18, releasedF18)
+
+-- Bind alt space
+-- alt = hs.hotkey.bind('alt', 'space', null, function()
+--   hs.application.launchOrFocus("iTerm")
+-- end)
 
