@@ -3,21 +3,13 @@
 ;;; Timewarrior -- timewarrior minor mode
 ;;; Commentary:
 ;;; Interact with timewarrior
+;;; Author: Niclas Pahlfer
 ;;; Code:
-
-
-;; (defun get-current-tag-duration ()
-;;   "Get timewarrior tag duratiuon."
-;;   (substring
-;;    (car
-;;     (split-string
-;;      (shell-command-to-string "timew get dom.active.duration")
-;;      "M")
-;;     )
-;;    2))
+;;;
 
 (defvar *is-active* nil "Cached active state.")
 (defvar *active-tag* nil "Cached active tag.")
+(defvar *tw-is-active* t "Global tw active state")
 
 (defun is-active ()
   "Get timewarrior active state."
@@ -40,6 +32,12 @@
     (setq *active-tag* tag)
     tag))
 
+(defun annotate-tag (text)
+  "Annotates timewarrior tag."
+  (progn
+    (shell-command (format "timew annotate '%s'" text))
+    text))
+
 (defun get-current-workspace ()
   "Get current workspace name."
   (safe-persp-name (+workspace-current)))
@@ -55,34 +53,54 @@
   "Get minor mode text"
   (concat " TW: " (correct-tag (get-active-tag))))
 
-(defun stop-timewarrior ()
-  (progn
-    (setq *is-active* nil)
-    (setq *active-tag* nil)
-    (stop-tracker)))
-
-(defun start-timewarrior ()
-  (if (bound-and-true-p timewarrior-mode)
+(defun correct-timewarrior ()
+  (if (and *tw-is-active* (bound-and-true-p timewarrior-mode))
       (progn
         (setq *is-active* t)
         (correct-tag (get-active-tag)))))
+
+(defun stop-timewarrior ()
+  (if (bound-and-true-p timewarrior-mode)
+      (progn
+        (setq *is-active* nil)
+        (setq *active-tag* nil)
+        (stop-tracker)
+        (message "TW stopped tracking"))))
+
+(defun start-timewarrior ()
+  (progn
+    (setq *tw-is-active* t)
+    (correct-timewarrior)
+    (message "TW tracking")))
+
+(defun annotate-timewarrior (annotation)
+  (progn
+    (stop-timewarrior)
+    (start-timewarrior)
+    (annotate-tag annotation)))
+
+(defun cancel-timewarrior ()
+  (progn
+    (setq *tw-is-active* nil)
+    (message "TW auto tracking cancelled")))
 
 ;; Timewarrior Minor Mode
 (define-minor-mode timewarrior-mode
   "Timewarrior time tracker"
   1
-  ; :lighter (:eval (get-mode-text))
   (get-mode-text)
   `(
-    (,(kbd "C-c C-1") . (lambda () (interactive) (start-timewarrior)))
-    (,(kbd "C-c C-2") . (lambda () (interactive) (stop-timewarrior)))
+    (,(kbd "C-c C-1") . (lambda () "TW Start" (interactive) (start-timewarrior)))
+    (,(kbd "C-c C-2") . (lambda () "TW Stop" (interactive) (stop-timewarrior)))
+    (,(kbd "C-c C-3") . (lambda (text) "TW Annotate" (interactive "sEnter annotate: ") (annotate-timewarrior text)))
+    (,(kbd "C-c C-4") . (lambda () "TW Cancel auto tracking" (interactive) (cancel-timewarrior)))
    )
    :global 1
 )
 
-;; Make this async to prevent slow saves.
-;; And look for another hook
-(add-hook 'after-save-hook #'start-timewarrior)
+;; Make this async to prevent the first save from being slow
+;; & look for another hook
+(add-hook 'after-save-hook #'correct-timewarrior)
 
 
 (provide 'timewarrior)
