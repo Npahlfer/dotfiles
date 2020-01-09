@@ -5,10 +5,16 @@
 ;; (package! some-package)
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
-
-(package! evil-matchit :recipe (:fetcher github :repo "redguardtoo/evil-matchit" :commit "7d65b4167b1f0086c2b42b3aec805e47a0d355c4"))
+;;
+(package! evil-matchit)
 (package! editorconfig)
 (package! eslint-fix)
+(package! helm-rg)
 (package! ripgrep)
 (package! projectile-ripgrep)
-(package! company-tabnine)
+(package! rg)
+(package! php-cs-fixer)
+(package! exec-path-from-shell)
+
+(when (featurep! :completion company)
+  (package! company-tabnine))
