@@ -6,6 +6,7 @@
 .vim/.VimballRecord
 .vim/.netrwhist
 .vim/doc/
-karabiner/automatic_backups/
+karabiner/automatic_backups*
+.doom.d/lisp/spotify.el
 tmp/
 

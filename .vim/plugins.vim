@@ -13,7 +13,7 @@ call plug#begin('~/.vim/bundle')
 
 " Plug 'Raimondi/delimitMate'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'editorconfig/editorconfig-vim'
@@ -51,9 +51,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
-Plug 'wakatime/vim-wakatime'
+" Plug 'wakatime/vim-wakatime'
 " Plug 'vim-scripts/paredit.vim'
-Plug 'jpalardy/vim-slime'
+" Plug 'jpalardy/vim-slime'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 " Plug 'flowtype/vim-flow', {
 "       \ 'autoload': {

@@ -3,10 +3,11 @@
 ;; Set theme
 ; (load-theme 'apropospriate-light t)
 ;; (load-theme 'doom-solarized-light t)
-(load-theme 'doom-one-light t)
-;; (load-theme 'doom-one t)
+;; (load-theme 'doom-one-light t)
+(load-theme 'doom-one t)
 ;; (load-theme 'doom-vibrant t)
 ;; (load-theme 'doom-nord t)
+;; (load-theme 'doom-nord-light t)
 ;; (load-theme 'doom-outrun-electric t)
 ;; (load-theme 'doom-peacock t)
 
@@ -102,7 +103,7 @@
         (insert (my-insert-dirname))
       (insert insert-name))))
 
-(global-set-key "\C-c\C-i" 'my-insert-filename)
+(global-set-key "\C-ci" 'my-insert-filename)
 
 (defun reopen-killed-file ()
   "Reopen the most recently killed file, if one exists."
@@ -116,6 +117,7 @@
             :i [M-left]                       #'windmove-left))
 
 (map! :leader
+      :desc "Eval defun"                      "e" #'eval-defun
       :desc "Kill buffer"                     "d" #'kill-this-buffer
       :desc "Reopen buffer"                   "1" #'reopen-killed-file
 
@@ -196,10 +198,6 @@
 ;; use eslint with web-mode for jsx files
 (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-;; (setq has-project-prettier-config
-;;       (or
-;;        (equal (locate-dominating-file default-directory ".prettierrc") "~/")
-;;        (equal (locate-dominating-file default-directory ".prettier.config.js") "~/")))
 (defun has-project-prettier-config ()
   (or
    (equal (locate-dominating-file default-directory ".prettierrc") "~/")
@@ -280,29 +278,62 @@
 
 ;; (setq company-backends '(company-tabnine company-capf))
 
-(defun add-company-tabnine ()
-  (add-to-list (make-local-variable 'company-backends) 'company-tabnine))
+;; (defun add-company-tabnine ()
+;;   (add-to-list (make-local-variable 'company-backends) 'company-tabnine))
 
-;; (def-package! company-tabnine
-;;   :config
-;;   (add-hook! (web-mode
-;;               rjsx-mode
-;;               js2-mode
-;;               lua-mode
-;;               php-mode
-;;               emacs-lisp-mode
-;;               python-mode)
-;;     #'add-company-tabnine))
-(setq +lsp-company-backend '(company-lsp :with company-tabnine :separate))
-(after! company
-  (setq company-idle-delay 0
-        company-show-numbers t))
+;;
+;; (after! company
+;;   (setq company-idle-delay 0
+;;         company-show-numbers t))
 
 ;; Trigger completion immediately.
 (setq company-idle-delay 0.2)
 
 ;; Number the candidates (use M-1, M-2 etc to select completions).
 (setq company-show-numbers t)
+
+(use-package! company-tabnine
+  ;; company-mode completion
+  :commands company-tabnine
+  :config (push 'company-tabnine company-backends))
+
+;; (use-package! company-tabnine
+;;   :config
+  ;; (add-hook! (web-mode
+  ;;             rjsx-mode
+  ;;             js2-mode
+  ;;             lua-mode
+  ;;             php-mode
+  ;;             emacs-lisp-mode
+  ;;             python-mode)
+  ;;   (lambda ()
+  ;;   (setq company-backends '(company-tabnine))))
+
+; (require 'company-tabnine)
+;; (use-package! company-tabnine
+;;   :after company
+;;   ; :ensure t
+;;   :config
+;;   ;; (add-to-list 'company-backends 'company-tabnine))
+;;   (add-to-list 'company-backends #'company-tabnine))
+;;   ; (cl-pushnew 'company-tabnine (default-value 'company-backends)))
+
+; (use-package company-tabnine :ensure t)
+(add-to-list 'company-backends #'company-tabnine)
+
+(after! php-mode
+  (set-company-backend! 'php-mode '(company-tabnine :with +php-company-backend)))
+
+(after! web-mode
+  (set-company-backend! 'web-mode '(company-tabnine)))
+
+(after! js2-mode
+  (set-company-backend! 'js2-mode '(company-tabnine :with company-tide)))
+
+(after! rjsx-mode
+  (set-company-backend! 'rjsx-mode '(company-tabnine :with company-tide)))
+
+;; (setq +lsp-company-backend '(company-lsp :with company-tabnine :separate))
 
 ;; Use the tab-and-go frontend.
 ;; Allows TAB to select and complete at the same time.
@@ -317,8 +348,7 @@
     (mapc (lambda (line)
             (insert (propertize (+doom-dashboard--center +doom-dashboard--width line)
                                 'face 'font-lock-comment-face) " ")
-            (insert "\n"))
-          '("                           ♥                           "))
+            (insert "\n")) '("                           ♥                           "))
     (when (and (stringp +doom-dashboard-banner-file)
                (display-graphic-p)
                (file-exists-p! +doom-dashboard-banner-file +doom-dashboard-banner-dir))
@@ -377,3 +407,25 @@
 (setq undo-limit 40000
       undo-outer-limit 8000000
       undo-strong-limit 100000)
+
+;; (add-hook 'go-mode-hook 'lsp-deferred)
+;; (setq gofmt-command "goimports")
+;; (add-hook 'before-save-hook 'gofmt-before-save)
+
+;; (add-to-list 'load-path (concat (getenv "GOPATH")  "/src/golang.org/x/lint/misc/emacs/"))
+;; (require 'golint)
+
+
+;; (add-to-list 'load-path "~/.doom.d/lisp/spotify.el")
+;; (require 'spotify)
+
+;; Settings
+;; (setq spotify-oauth2-client-secret (getenv "SPOTIFY_SECRET"))
+;; (setq spotify-oauth2-client-id (getenv "SPOTIFY_ID"))
+
+;; (setq spotify-transport 'connect)
+;; (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)
+
+;; (setq spotify-player-status-format "[%a - %t %r%s]")
+;; (setq spotify-player-status-not-repeating-text "")
+;; (setq spotify-player-status-not-shuffling-text "")

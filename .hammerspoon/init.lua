@@ -9,11 +9,11 @@ k = hs.hotkey.modal.new({}, "F17")
 -- end
 -- k:bind('', 'l', nil, lfun)
 
-apps = { 
+apps = {
   "Figma",
   "Preview",
   "Messages",
-  space = "Emacs",
+  -- space = "Emacs",
   e = "iTerm",
   t = "iTerm",
   s = "Slack",

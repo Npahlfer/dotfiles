@@ -16,9 +16,9 @@
        ;; ivy               ; a search engine for love and life
 
        :ui
-       ;;deft              ; notational velocity for Emacs
+       ;; deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
-       doom-dashboard    ; a nifty splash screen for Emacs
+       ; doom-dashboard    ; a nifty splash screen for Emacs
        ; doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
@@ -66,6 +66,11 @@
        ;; term              ; terminals in Emacs
        ;;vterm             ; another terminals in Emacs
 
+       :checkers
+       syntax              ; tasing you for every semicolon you forget
+       ;;spell             ; tasing you for misspelling mispelling
+       ;;grammar           ; tasing grammar mistake every you make
+
        :tools
        ;;ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
@@ -74,13 +79,12 @@
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
-       flycheck          ; tasing you for every semicolon you forget
-       ;;flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
-        +docsets)        ; ...or in Dash docsets locally
+        ; +docsets
+        )        ; ...or in Dash docsets locally
        ;;lsp
-       ;;macos             ; MacOS-specific commands
+       macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -96,7 +100,7 @@
        ;;agda              ; types of types of types of types...
        ;;assembly          ; assembly for fun or debugging
        ;;cc                ; C/C++/Obj-C madness
-       clojure           ; java with a lisp
+       ;; clojure           ; java with a lisp
        common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
@@ -109,7 +113,7 @@
        ;;ess               ; emacs speaks statistics
        ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
-       ;;go                ; the hipster dialect
+       go                ; the hipster dialect
        ;;(haskell +intero) ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
@@ -120,7 +124,7 @@
        ;;latex             ; writing papers in Emacs has never been so fun
        ;;lean
        ;;ledger            ; an accounting system in Emacs
-       lua               ; one-based indices? one-based indices
+       ; lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
@@ -137,7 +141,7 @@
        php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       ; python            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;rest              ; Emacs as a REST client
@@ -186,11 +190,20 @@
     ((magit-todos-exclude-globs "*.html" "*.min.js" "node_modules/")
      magit-todos-exclude-globs "*.html" "*.min.js" "node_modules/" "main.9d0dd6b0.js" "main.78fa3e49.js" "main.b6493068.js"))))
 
+(setq-default line-spacing 0.2)
+
+(set-face-attribute 'default nil :height 150)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Iosevka Term" :foundry "nil" :slant normal :weight normal :height 140 :width normal))))
+ '(default ((t (:family "Iosevka Term" :foundry "nil" :slant normal :weight normal :height 150 :width normal))))
  '(lazy-highlight ((t (:background "#f00cff" :foreground "#dbdddd" :weight bold))))
  '(line-number ((t (:inherit default :foreground "#aaaddd" :strike-through nil :underline nil :slant normal :weight normal)))))
+
+
+(when noninteractive
+  (after! undo-tree
+    (global-undo-tree-mode -1)))

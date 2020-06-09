@@ -11,7 +11,7 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 # convenience redefinitions
-alias lsa='ls -lah'
+alias lsa='ls -ltrah'
 alias lsl='ls -l'
 alias fileinfo='mdls'
 alias dir='ls -lh'
@@ -40,10 +40,10 @@ alias tv=terminal_velocity
 alias ccompile='vagrant ssh -c "cd /var/www;composer compile"'
 alias MakeTags='ctags -R .'
 alias tw='timew'
+alias track='timew track'
 alias tsm='timew summary :ids :annotations'
 alias tws='timew start'
 alias twt='timew stop'
-alias twa='timew annotate'
 alias td='timew day'
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
