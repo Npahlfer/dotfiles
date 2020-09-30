@@ -156,7 +156,7 @@
        ;;terra             ; Earth and Moon in alignment for performance.
        web               ; the tubes
 
-       :email
+       ;; :email
        ;;(mu4e +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
@@ -207,3 +207,23 @@
 (when noninteractive
   (after! undo-tree
     (global-undo-tree-mode -1)))
+
+
+;; (use-package-hook! company
+;;   :post-init
+;;   (setq +lsp-company-backend '(company-lsp :with company-tabnine :separate)
+;;         company-idle-delay 0.2
+;;         company-show-numbers t)
+;;   (set-company-backend! 'rjsx-mode '(company-tabnine :with company-tide :separate)
+;;     company-idle-delay 0.2
+;;     company-show-numbers t)
+;;   (set-company-backend! 'js2-mode '(company-tabnine :with company-tide :separate)
+;;     company-idle-delay 0.2
+;;     company-show-numbers t)
+;;   (set-company-backend! 'web-mode #'company-tabnine
+;;     company-idle-delay 0.2
+;;     company-show-numbers t)
+;;   (set-company-backend! 'php-mode '(company-tabnine :with +php-company-backend :separate)
+;;     company-idle-delay 0.2
+;;     company-show-numbers t)
+;;   )

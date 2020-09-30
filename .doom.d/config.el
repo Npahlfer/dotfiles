@@ -273,6 +273,30 @@
 ;;     (find-file-other-window filename)
 ;;     (org-mode)))
 
+
+;; if company-tabnine stops working, try kill-local-variable RET company-backends
+
+(require 'company-tabnine)
+(add-to-list 'company-backends #'company-tabnine)
+
+(defun add-company-tabnine ()
+  (add-to-list (make-local-variable 'company-backends) 'company-tabnine))
+
+(use-package! company-tabnine
+  :config
+  (setq company-idle-delay 0
+        company-show-numbers t)
+  (add-hook! (web-mode-local-vars
+              php-mode-local-vars
+              js2-mode-local-vars
+              rjsx-mode-local-vars
+              emacs-lisp-mode-local-vars)
+    #'add-company-tabnine))
+
+; (use-package company-tabnine :ensure t)
+;;
+;; (setq company-backends '(company-tabnine company-capf))
+
 ;; (after! company
 ;;   (add-to-list 'company-backends 'company-tabnine))
 
@@ -287,15 +311,15 @@
 ;;         company-show-numbers t))
 
 ;; Trigger completion immediately.
-(setq company-idle-delay 0.2)
+;; (setq company-idle-delay 0.2)
 
 ;; Number the candidates (use M-1, M-2 etc to select completions).
-(setq company-show-numbers t)
+;; (setq company-show-numbers t)
 
-(use-package! company-tabnine
-  ;; company-mode completion
-  :commands company-tabnine
-  :config (push 'company-tabnine company-backends))
+;; (use-package! company-tabnine
+;;   ;; company-mode completion
+;;   :commands company-tabnine
+;;   :config (push 'company-tabnine company-backends))
 
 ;; (use-package! company-tabnine
 ;;   :config
@@ -309,7 +333,7 @@
   ;;   (lambda ()
   ;;   (setq company-backends '(company-tabnine))))
 
-; (require 'company-tabnine)
+;; (require 'company-tabnine)
 ;; (use-package! company-tabnine
 ;;   :after company
 ;;   ; :ensure t
@@ -319,13 +343,13 @@
 ;;   ; (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 ; (use-package company-tabnine :ensure t)
-(add-to-list 'company-backends #'company-tabnine)
+;; (add-to-list 'company-backends #'company-tabnine)
 
-(after! php-mode
-  (set-company-backend! 'php-mode '(company-tabnine :with +php-company-backend)))
+;; (after! php-mode
+;;   (set-company-backend! 'php-mode '(company-tabnine :with +php-company-backend)))
 
-(after! web-mode
-  (set-company-backend! 'web-mode '(company-tabnine)))
+;; (after! web-mode
+;;   (set-company-backend! 'web-mode #'company-tabnine))
 
 (after! js2-mode
   (set-company-backend! 'js2-mode '(company-tabnine :with company-tide)))
