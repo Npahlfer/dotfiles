@@ -259,51 +259,66 @@ let g:loaded_python_provider = 1
 " else
 "   let g:python3_host_prog = "~/.pyenv/shims/python3"
 " endif
-
-" tern
-if exists('g:plugs["tern_for_vim"]')
-  " autocmd FileType javascript setlocal omnifunc=tern#Complete
-endif
-
-" tern
-autocmd FileType javascript nnoremap <silent> <buffer> gb :TernDef<CR>
-nnoremap <C-g><C-t> :TernType<CR>
-
-"enable keyboard shortcuts
-let g:tern_map_keys=1
-"show argument hints
-let g:tern_show_argument_hints='on_hold'
-
+"
 " deoplete
 let g:deoplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
-let g:tern_request_timeout = 1
-let g:tern_show_signature_in_pum = 1  " This do disable full signature type on autocomplete
-let g:deoplete#sources#ternjs#types = 1
 
-"Add extra filetypes
-let g:tern#filetypes = [
-      \ 'javascript',
-      \ 'jsx',
-      \ 'tsx',
-      \ 'javascript.jsx',
-      \ 'vue'
-      \ ]
 
-" Use tern_for_vim.
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
-inoremap <expr><TAB>  pumvisible()? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB>  pumvisible()? "\<C-p>" : "\<TAB>"
+""""
+"""" CoC
+""""
+let g:coc_global_extensions = ['coc-tsserver']
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
 
-" inoremap <silent><expr> <TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ <SID>check_back_space() ? "\<TAB>" :
-" \ deoplete#mappings#manual_complete()
-" function! s:check_back_space() abort "{{{
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~ '\s'
-" endfunction"}}}
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+
 
 " enable jsx for js files
 let g:jsx_ext_required = 0
@@ -316,15 +331,6 @@ let g:LanguageClient_serverCommands = {
     \ 'ocaml': ['ocaml-language-server', '--stdio'],
     \ }
 
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<cr>
-nnoremap <silent> gf :call LanguageClient_textDocument_formatting()<cr>
-nnoremap <silent> g<cr> :call LanguageClient_textDocument_hover()<cr>
-
-" nnoremap gc :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
 
 " phplint shortcut
 noremap <Leader-l> :Phplint<CR></CR>
@@ -353,11 +359,9 @@ let g:ale_javascript_eslint_executable = local_eslint
 " " let g:ale_completion_enabled = 1
 " " let g:ale_completion_delay = 100
 
-
 " " let g:ale_linter_aliases = {'jsx': 'css'}
 let g:ale_sign_error = '?'
 let g:ale_sign_warning = '!'
-
 
 "" Ale config
 " filetype off
@@ -402,9 +406,9 @@ set statusline+=%*
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 
-" let g:prettier#exec_cmd_async = 1
-" let g:prettier#autoformat = 0
-" autocmd BufWritePre *.jsx,*.tsx,*.js,*.css,*.scss,*.less PrettierAsync
+let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.jsx,*.tsx,*.js,*.css,*.scss,*.less PrettierAsync
 
 " max line lengh that prettier will wrap on
 " let g:prettier#config#print_width = 100
@@ -447,8 +451,6 @@ let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 " let g:neoformat_only_msg_on_error = 1
 
 " nnoremap gp :silent %!prettier --stdin --trailing-comma all --single-quote<CR>
-
-" au VimEnter * RainbowParentheses
 
 " delimitMate
 " let delimitMate_balance_matchpairs = 0
@@ -573,8 +575,8 @@ nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
 
 " gen tags
-let g:gen_tags#ctags_auto_gen=1
-let g:gen_tags#gtags_auto_gen=1
+" let g:gen_tags#ctags_auto_gen=1
+" let g:gen_tags#gtags_auto_gen=1
 
 " Generate js ctags
 command! MakeJSTags !find . -type f -iregex ".*\.js$" -not -path "./node_modules/*" -exec jsctags {} -f \; | sed '/^$/d' | sort > tags
@@ -630,4 +632,4 @@ autocmd BufReadPost *
       \ endif
 
 " Ctags generation
-command! MakeTags GenCtags
+" command! MakeTags GenCtags

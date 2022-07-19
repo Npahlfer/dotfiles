@@ -111,6 +111,8 @@
   (when killed-file-list
     (find-file (pop killed-file-list))))
 
+(setq projectile-project-search-path '("~/Projects/" ))
+
 (map! (:map override
             :i "C-j"                          #'eval-print-last-sexp
             :i [M-right]                      #'windmove-right

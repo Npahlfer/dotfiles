@@ -16,7 +16,7 @@
   (equal (string-trim-right (shell-command-to-string "timew get dom.active")) "1"))
 
 (defun stop-tracker ()
-  "Get timewarrior tag duratiuon."
+  "Get timewarrior tag duration."
   (shell-command "timew stop :quiet >> /dev/null"))
 
 (defun get-active-tag ()

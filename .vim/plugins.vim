@@ -12,15 +12,15 @@ call plug#begin('~/.vim/bundle')
 " -----------------------------------------------------
 
 " Plug 'Raimondi/delimitMate'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'SirVer/ultisnips'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'honza/vim-snippets'
 Plug 'idanarye/vim-yankitute'
-Plug 'jsfaint/gen_tags.vim'
+" Plug 'jsfaint/gen_tags.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
@@ -38,12 +38,14 @@ Plug 'osyo-manga/vim-over'
 " Plug 'justinmk/vim-sneak'
 Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim' " TypeScript syntax
+Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
 Plug 'qpkorr/vim-bufkill'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'sbdchd/neoformat'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'ternjs/tern_for_vim'
+" Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -51,23 +53,19 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'w0rp/ale'
-" Plug 'wakatime/vim-wakatime'
-" Plug 'vim-scripts/paredit.vim'
-" Plug 'jpalardy/vim-slime'
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-" Plug 'flowtype/vim-flow', {
-"       \ 'autoload': {
-"       \     'filetypes': 'javascript'
-"       \ }}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'prettier/vim-prettier', {
     \ 'do': 'npm install',
     \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss'] }
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+" Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
 
 " ---- Archive ----------------------------------------
+" Plug 'vim-scripts/paredit.vim'
+" Plug 'jpalardy/vim-slime'
 " Plug 'zxqfl/tabnine-vim'
 " Plug 'sbdchd/neoformat'
 " Plug 'reasonml-editor/vim-reason'

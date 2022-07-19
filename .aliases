@@ -17,7 +17,7 @@ alias fileinfo='mdls'
 alias dir='ls -lh'
 alias df="df -h"
 alias h=history
-alias sprofile='source ~/.bash_profile && source ~/.zshrc'
+alias sprofile='source ~/.zshrc && source ~/.bash_profile'
 alias greppattern="rg -oHnr '$@' ."
 alias greptag="grep -oHnr '\<{\|.*\|}\>' ."
 alias grep='grep'
@@ -112,7 +112,7 @@ alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
 alias g="git"
 alias vim="nvim"
 alias v="nvim"
-alias tt="timetrap"
+#alias tt="timetrap"
 #alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 
@@ -126,6 +126,8 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash"
 
 ## GIT
 alias gc="git commit"
+alias gch="git checkout"
+alias gpo="git pull origin"
 alias gs="git status"
 alias gsd="echo 'gsd'"
 

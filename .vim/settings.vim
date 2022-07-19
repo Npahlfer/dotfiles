@@ -5,7 +5,7 @@ syntax on
 
 set termguicolors
 " colorscheme breve
-colorscheme blame
+" colorscheme blame
 
 " hi htmlTag guifg=#00bdec guibg=#200000 gui=bold
 
@@ -69,6 +69,7 @@ set backspace=indent,eol,start
 
 " Highlight current line
 set cursorline
+" hi CursorLine guifg=NONE guibg=#2d3c45 ctermbg=237 gui=NONE term=NONE cterm=NONE
 
 " Add vertical spaces to keep right and left aligned
 set diffopt=filler
@@ -198,6 +199,7 @@ set title
 
 " Use visual bell instead of audible bell
 set visualbell
+set belloff=all
 
 " Character for CLI expansion (TAB-completion).
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js,*.sql
